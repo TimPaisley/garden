@@ -1,0 +1,86 @@
+html, body {
+  background-color: #F2F6FA;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+.container {
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.banner {
+  padding: 1.5rem;
+}
+
+.banner .title {
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.125;
+  margin: 0;
+}
+
+.banner .subtitle {
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.content {
+  padding: 1.5rem;
+  display: flex;
+}
+
+.seeds {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.seed-option {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.seed-option:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.seed-image {
+  margin-right: 20px;
+}
+
+.seed-details {
+  flex: 1;
+}
+
+.seed-name {
+  font-size: 1.5rem;
+}
+
+.seed-description {
+  font-size: 0.8rem;
+  opacity: 0.5;
+}
+
+.seed-cost {
+  justify-self: flex-end;
+}
+
+.garden {
+  border: 1px dashed black;
+  flex: 0 0 400px;
+  height: 400px;
+  
+  display: grid;
+  grid-template-columns: repeat(9, auto);
+  grid-template-rows: repeat(9, auto);
+}
+
+.garden div {
+  border: 0.5px solid rgba(0,0,0,0.1);
+  box-sizing: border-box;
+}
