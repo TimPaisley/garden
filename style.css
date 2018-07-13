@@ -49,6 +49,10 @@ html, body {
   background-color: rgba(255, 255, 255, 0.8);
 }
 
+.seed-selected {
+  border-left: 3px solid black;
+}
+
 .seed-image {
   margin-right: 20px;
 }
@@ -80,7 +84,23 @@ html, body {
   grid-template-rows: repeat(9, auto);
 }
 
-.garden div {
+.plot {
   border: 0.5px solid rgba(0,0,0,0.1);
   box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.plot-active {
+  cursor: pointer;
+}
+
+.plot-active:hover {
+  border-color: rgba(0,0,0,0.5);
+}
+
+.plot-seed {
+  position: absolute;
+  height: 30px;
 }

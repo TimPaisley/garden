@@ -2,7 +2,7 @@ module View exposing (..)
 
 import Messages exposing (Msg(..))
 import Model exposing (Model)
-import Plant exposing (Plant)
+import Seed exposing (Seed)
 import Array exposing (Array)
 import Array2D exposing (Array2D)
 import Html exposing (..)
@@ -29,37 +29,56 @@ banner =
 content : Model -> Html Messages.Msg
 content model =
     div [ class "content" ]
-        [ div [ class "seeds" ] (renderSeeds)
-        , div [ class "garden" ] (renderGarden model.garden)
+        [ div [ class "seeds" ] (listSeedOptions model.selected)
+        , div [ class "garden" ] (renderGarden model.garden model.selected)
         ]
 
 
-renderSeeds : List (Html Messages.Msg)
-renderSeeds =
+listSeedOptions : Maybe Seed -> List (Html Messages.Msg)
+listSeedOptions selected =
     let
         seedOption seed =
-            div [ class "seed-option" ]
-                [ img [ class "seed-image", src <| Plant.seedImage seed, height 30 ] []
-                , div [ class "seed-details" ]
-                    [ div [ class "seed-name" ] [ text <| (toString seed) ++ " Seeds" ]
-                    , div [ class "seed-description" ] [ text <| Plant.seedDescription seed ]
+            let
+                { name, maturity, description, image, cost } =
+                    seed
+            in
+                div
+                    [ classList [ ( "seed-option", True ), ( "seed-selected", (Just seed) == selected ) ]
+                    , onClick <| SelectSeed seed
                     ]
-                , div [ class "seed-cost" ] [ text <| toString (Plant.seedCost seed) ]
-                ]
+                    [ img [ class "seed-image", src image, height 30 ] []
+                    , div [ class "seed-details" ]
+                        [ div [ class "seed-name" ] [ text <| name ++ " Seeds" ]
+                        , div [ class "seed-description" ] [ text description ]
+                        ]
+                    , div [ class "seed-cost" ] [ text <| toString cost ]
+                    ]
     in
-        List.map seedOption Plant.allSeeds
+        List.map seedOption Seed.allSeeds
 
 
-renderGarden : Array2D (Maybe Plant) -> List (Html Messages.Msg)
-renderGarden garden =
+renderGarden : Array2D (Maybe Seed) -> Maybe Seed -> List (Html Messages.Msg)
+renderGarden garden selectedSeed =
     let
-        plot p =
-            div [ class "plot" ] (renderSeed p)
+        plot row column seed =
+            let
+                plotActive =
+                    selectedSeed /= Nothing && seed == Nothing
 
-        renderSeed plant =
-            case plant of
-                Just p ->
-                    [ img [ class "plot-seed", src <| Plant.seedImage p.seed ] [] ]
+                msg =
+                    if plotActive then
+                        PlantSeed row column selectedSeed
+                    else
+                        NoOp
+            in
+                div
+                    [ classList [ ( "plot", True ), ( "plot-active", plotActive ) ], onClick msg ]
+                    (renderSeed seed)
+
+        renderSeed seed =
+            case seed of
+                Just s ->
+                    [ img [ class "plot-seed", src s.image ] [] ]
 
                 Nothing ->
                     []
@@ -68,4 +87,4 @@ renderGarden garden =
         flatten2DToList array2D =
             Array.toList <| Array.foldr Array.append Array.empty array2D.data
     in
-        Array2D.map (\p -> plot p) garden |> flatten2DToList
+        Array2D.indexedMap plot garden |> flatten2DToList

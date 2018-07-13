@@ -1,14 +1,14 @@
 module Model exposing (..)
 
 import Messages exposing (Msg)
-import Plant exposing (Plant)
+import Seed exposing (Seed)
 import Array2D exposing (Array2D)
 
 
 type alias Model =
     { time : Float
-    , garden : Array2D (Maybe Plant)
-    , selected : Maybe Plant
+    , garden : Array2D (Maybe Seed)
+    , selected : Maybe Seed
     }
 
 
