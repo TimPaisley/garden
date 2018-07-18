@@ -10528,7 +10528,7 @@ var _elm_lang$html$Seed$allSeeds = {
 				_0: {name: 'Lettuce', maturity: 90, color: 'green', description: 'Reaches maturity in 90s', image: 'https://image.flaticon.com/icons/svg/135/135699.svg', cost: 25},
 				_1: {
 					ctor: '::',
-					_0: {name: 'Grapes', maturity: 120, color: 'purple', description: 'Reaches maturity in 120s', image: 'https://image.flaticon.com/icons/svg/135/135542.svg', cost: 30},
+					_0: {name: 'Grape', maturity: 120, color: 'purple', description: 'Reaches maturity in 120s', image: 'https://image.flaticon.com/icons/svg/135/135542.svg', cost: 30},
 					_1: {ctor: '[]'}
 				}
 			}
@@ -10777,7 +10777,7 @@ var _elm_lang$html$Model$initialModel = function () {
 		time: 0,
 		garden: A3(_tortus$elm_array_2d$Array2D$repeat, size, size, _elm_lang$core$Maybe$Nothing),
 		selected: _elm_lang$core$Maybe$Nothing,
-		bank: 10
+		bank: 100
 	};
 }();
 var _elm_lang$html$Model$init = {ctor: '_Tuple2', _0: _elm_lang$html$Model$initialModel, _1: _elm_lang$core$Platform_Cmd$none};
@@ -11230,23 +11230,7 @@ var _elm_lang$html$View$banner = F2(
 								_elm_lang$core$Basics$toString(bank)),
 							_1: {ctor: '[]'}
 						}),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$div,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$class('time-of-day'),
-								_1: {ctor: '[]'}
-							},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text(
-									_elm_lang$html$View$formatTime(time)),
-								_1: {ctor: '[]'}
-							}),
-						_1: {ctor: '[]'}
-					}
+					_1: {ctor: '[]'}
 				}
 			});
 	});

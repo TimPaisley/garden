@@ -26,7 +26,6 @@ banner time bank =
             , h2 [ class "subtitle" ] [ text "Plant Stuff and Profit" ]
             ]
         , div [ class "bank" ] [ text <| toString bank ]
-        , div [ class "time-of-day" ] [ text <| formatTime time ]
         ]
 
 

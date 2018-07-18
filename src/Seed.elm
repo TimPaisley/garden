@@ -41,7 +41,7 @@ allSeeds =
       , image = "https://image.flaticon.com/icons/svg/135/135699.svg"
       , cost = 25
       }
-    , { name = "Grapes"
+    , { name = "Grape"
       , maturity = 120
       , color = "purple"
       , description = "Reaches maturity in 120s"

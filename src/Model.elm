@@ -22,7 +22,7 @@ initialModel =
         { time = 0
         , garden = Array2D.repeat size size Nothing
         , selected = Nothing
-        , bank = 10
+        , bank = 100
         }
 
 
