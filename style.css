@@ -11,6 +11,10 @@ html, body {
 
 .banner {
   padding: 1.5rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .banner .title {
@@ -25,6 +29,11 @@ html, body {
   font-weight: 400;
   line-height: 1.25;
   margin: 0;
+}
+
+.time-of-day {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 1.5rem;
 }
 
 .content {
@@ -45,7 +54,12 @@ html, body {
   user-select: none;
 }
 
-.seed-option:hover {
+.seed-option-disabled {
+  opacity: 0.2;
+  cursor: default;
+}
+
+.seed-option:not(.seed-option-disabled):hover {
   background-color: rgba(255, 255, 255, 0.8);
 }
 
@@ -100,7 +114,16 @@ html, body {
   border-color: rgba(0,0,0,0.5);
 }
 
+.plot-background {
+  width: 100%;
+  height: 100%;
+  opacity: 0.25;
+  cursor: pointer;
+}
+
 .plot-seed {
   position: absolute;
   height: 30px;
+  pointer-events: none;
+  user-select: none;
 }

@@ -8,4 +8,5 @@ type Msg
     = Tick Time
     | NoOp
     | SelectSeed Seed
-    | PlantSeed Int Int (Maybe Seed)
+    | PlantSeed Int Int Seed
+    | HarvestSeed Int Int Seed
