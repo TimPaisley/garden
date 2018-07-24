@@ -1,9 +1,11 @@
 module View exposing (..)
 
+import Inventory exposing (Inventory)
 import Messages exposing (Msg(..))
 import Model exposing (Model)
 import Seed exposing (Seed)
 import Array exposing (Array)
+import AllDict exposing (AllDict)
 import Array2D exposing (Array2D)
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -11,6 +13,7 @@ import Html.Events exposing (..)
 import FormatNumber exposing (format)
 import FormatNumber.Locales exposing (usLocale)
 import FontAwesome exposing (icon)
+import Html5.DragDrop
 
 
 view : Model -> Html Messages.Msg
@@ -56,41 +59,29 @@ formatTime time =
 content : Model -> Html Messages.Msg
 content model =
     div [ class "content" ]
-        [ div [ class "seeds" ] (listSeedOptions model.selected model.bank)
+        [ div [ class "seeds" ] (renderInventory model.inventory)
         , div [ class "garden" ] (renderGarden model.garden model.selected)
         ]
 
 
-listSeedOptions : Maybe Seed -> Int -> List (Html Messages.Msg)
-listSeedOptions selected bank =
+renderInventory : Inventory -> List (Html Messages.Msg)
+renderInventory inventory =
     let
-        seedOption seed =
-            let
-                { name, description, image, cost } =
-                    seed
-
-                disabled =
-                    cost > bank
-
-                msg =
-                    if disabled then
-                        NoOp
-                    else
-                        SelectSeed seed
-            in
-                div
-                    [ classList [ ( "seed-option", True ), ( "seed-selected", (Just seed) == selected ), ( "seed-option-disabled", disabled ) ]
-                    , onClick msg
-                    ]
-                    [ img [ class "seed-image", src image, height 30 ] []
+        stack ( seed, count ) =
+            if count > 0 then
+                div ([ class "seed-option" ] ++ Html5.DragDrop.draggable DragDropMsg seed)
+                    [ img [ class "seed-image", src seed.image, height 30 ] []
                     , div [ class "seed-details" ]
-                        [ div [ class "seed-name" ] [ text <| name ++ " Seeds" ]
-                        , div [ class "seed-description" ] [ text description ]
+                        [ div [ class "seed-name" ] [ text <| seed.name ++ " Seeds" ]
+                        , div [ class "seed-description" ] [ text seed.description ]
                         ]
-                    , div [ class "seed-cost" ] [ text <| toString cost ]
+                    , div [ class "seed-cost" ] [ text <| toString count ]
                     ]
+            else
+                div [] []
     in
-        List.map seedOption Seed.allSeeds
+        AllDict.toList inventory
+            |> List.map stack
 
 
 renderGarden : Array2D (Maybe Seed) -> Maybe Seed -> List (Html Messages.Msg)
@@ -110,9 +101,14 @@ renderGarden garden selectedSeed =
                             NoOp
             in
                 div
-                    [ classList [ ( "plot", True ), ( "plot-active", selectedSeed /= Nothing && plantedSeed == Nothing ) ]
-                    , onClick clickMsg
-                    ]
+                    ([ classList
+                        [ ( "plot", True )
+                        , ( "plot-active", selectedSeed /= Nothing && plantedSeed == Nothing )
+                        ]
+                     , onClick clickMsg
+                     ]
+                        ++ Html5.DragDrop.droppable DragDropMsg ( row, column )
+                    )
                     (renderSeed plantedSeed)
 
         renderSeed seed =

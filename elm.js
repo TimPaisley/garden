@@ -10102,6 +10102,1034 @@ var _cuducos$elm_format_number$FormatNumber$format = F2(
 			A2(_cuducos$elm_format_number$Helpers$parse, locale, num));
 	});
 
+var _eeue56$elm_all_dict$AllDict$foldr = F3(
+	function (f, acc, t) {
+		foldr:
+		while (true) {
+			var _p0 = t;
+			if (_p0.ctor === 'RBEmpty_elm_builtin') {
+				return acc;
+			} else {
+				var _v1 = f,
+					_v2 = A3(
+					f,
+					_p0._1,
+					_p0._2,
+					A3(_eeue56$elm_all_dict$AllDict$foldr, f, acc, _p0._4)),
+					_v3 = _p0._3;
+				f = _v1;
+				acc = _v2;
+				t = _v3;
+				continue foldr;
+			}
+		}
+	});
+var _eeue56$elm_all_dict$AllDict$keys = function (dict) {
+	return A3(
+		_eeue56$elm_all_dict$AllDict$foldr,
+		F3(
+			function (key, value, keyList) {
+				return {ctor: '::', _0: key, _1: keyList};
+			}),
+		{ctor: '[]'},
+		dict);
+};
+var _eeue56$elm_all_dict$AllDict$values = function (dict) {
+	return A3(
+		_eeue56$elm_all_dict$AllDict$foldr,
+		F3(
+			function (key, value, valueList) {
+				return {ctor: '::', _0: value, _1: valueList};
+			}),
+		{ctor: '[]'},
+		dict);
+};
+var _eeue56$elm_all_dict$AllDict$toList = function (dict) {
+	return A3(
+		_eeue56$elm_all_dict$AllDict$foldr,
+		F3(
+			function (key, value, list) {
+				return {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: key, _1: value},
+					_1: list
+				};
+			}),
+		{ctor: '[]'},
+		dict);
+};
+var _eeue56$elm_all_dict$AllDict$foldl = F3(
+	function (f, acc, dict) {
+		foldl:
+		while (true) {
+			var _p1 = dict;
+			if (_p1.ctor === 'RBEmpty_elm_builtin') {
+				return acc;
+			} else {
+				var _v5 = f,
+					_v6 = A3(
+					f,
+					_p1._1,
+					_p1._2,
+					A3(_eeue56$elm_all_dict$AllDict$foldl, f, acc, _p1._3)),
+					_v7 = _p1._4;
+				f = _v5;
+				acc = _v6;
+				dict = _v7;
+				continue foldl;
+			}
+		}
+	});
+var _eeue56$elm_all_dict$AllDict$isBBlack = function (dict) {
+	var _p2 = dict;
+	_v8_2:
+	do {
+		if (_p2.ctor === 'RBNode_elm_builtin') {
+			if (_p2._0.ctor === 'BBlack') {
+				return true;
+			} else {
+				break _v8_2;
+			}
+		} else {
+			if (_p2._0.ctor === 'LBBlack') {
+				return true;
+			} else {
+				break _v8_2;
+			}
+		}
+	} while(false);
+	return false;
+};
+var _eeue56$elm_all_dict$AllDict$showFlag = function (f) {
+	var _p3 = f;
+	switch (_p3.ctor) {
+		case 'Insert':
+			return 'Insert';
+		case 'Remove':
+			return 'Remove';
+		default:
+			return 'Same';
+	}
+};
+var _eeue56$elm_all_dict$AllDict$sizeHelp = F2(
+	function (n, dict) {
+		sizeHelp:
+		while (true) {
+			var _p4 = dict;
+			if (_p4.ctor === 'RBEmpty_elm_builtin') {
+				return n;
+			} else {
+				var _v11 = A2(_eeue56$elm_all_dict$AllDict$sizeHelp, n + 1, _p4._4),
+					_v12 = _p4._3;
+				n = _v11;
+				dict = _v12;
+				continue sizeHelp;
+			}
+		}
+	});
+var _eeue56$elm_all_dict$AllDict$size = function (dict) {
+	return A2(_eeue56$elm_all_dict$AllDict$sizeHelp, 0, dict);
+};
+var _eeue56$elm_all_dict$AllDict$isEmpty = function (dict) {
+	var _p5 = dict;
+	if (_p5.ctor === 'RBEmpty_elm_builtin') {
+		return true;
+	} else {
+		return false;
+	}
+};
+var _eeue56$elm_all_dict$AllDict$getOrd = function (dict) {
+	getOrd:
+	while (true) {
+		var _p6 = dict;
+		if (_p6.ctor === 'RBEmpty_elm_builtin') {
+			return _p6._1;
+		} else {
+			var _v15 = _p6._3;
+			dict = _v15;
+			continue getOrd;
+		}
+	}
+};
+var _eeue56$elm_all_dict$AllDict$getHelper = F2(
+	function (targetKey, dict) {
+		getHelper:
+		while (true) {
+			var ord = _eeue56$elm_all_dict$AllDict$getOrd(dict);
+			var _p7 = dict;
+			if (_p7.ctor === 'RBEmpty_elm_builtin') {
+				return _elm_lang$core$Maybe$Nothing;
+			} else {
+				var _p8 = A2(
+					_elm_lang$core$Basics$compare,
+					ord(targetKey),
+					ord(_p7._1));
+				switch (_p8.ctor) {
+					case 'LT':
+						var _v18 = targetKey,
+							_v19 = _p7._3;
+						targetKey = _v18;
+						dict = _v19;
+						continue getHelper;
+					case 'EQ':
+						return _elm_lang$core$Maybe$Just(_p7._2);
+					default:
+						var _v20 = targetKey,
+							_v21 = _p7._4;
+						targetKey = _v20;
+						dict = _v21;
+						continue getHelper;
+				}
+			}
+		}
+	});
+var _eeue56$elm_all_dict$AllDict$get = F2(
+	function (targetKey, dict) {
+		return A2(_eeue56$elm_all_dict$AllDict$getHelper, targetKey, dict);
+	});
+var _eeue56$elm_all_dict$AllDict$member = F2(
+	function (key, dict) {
+		var _p9 = A2(_eeue56$elm_all_dict$AllDict$getHelper, key, dict);
+		if (_p9.ctor === 'Just') {
+			return true;
+		} else {
+			return false;
+		}
+	});
+var _eeue56$elm_all_dict$AllDict$max = function (dict) {
+	max:
+	while (true) {
+		var _p10 = dict;
+		if (_p10.ctor === 'RBNode_elm_builtin') {
+			if (_p10._4.ctor === 'RBEmpty_elm_builtin') {
+				return {ctor: '_Tuple2', _0: _p10._1, _1: _p10._2};
+			} else {
+				var _v24 = _p10._4;
+				dict = _v24;
+				continue max;
+			}
+		} else {
+			return _elm_lang$core$Native_Utils.crashCase(
+				'AllDict',
+				{
+					start: {line: 157, column: 5},
+					end: {line: 165, column: 51}
+				},
+				_p10)('(max Empty) is not defined');
+		}
+	}
+};
+var _eeue56$elm_all_dict$AllDict$min = function (dict) {
+	min:
+	while (true) {
+		var _p12 = dict;
+		if (_p12.ctor === 'RBNode_elm_builtin') {
+			if ((_p12._3.ctor === 'RBEmpty_elm_builtin') && (_p12._3._0.ctor === 'LBlack')) {
+				return {ctor: '_Tuple2', _0: _p12._1, _1: _p12._2};
+			} else {
+				var _v26 = _p12._3;
+				dict = _v26;
+				continue min;
+			}
+		} else {
+			return _elm_lang$core$Native_Utils.crashCase(
+				'AllDict',
+				{
+					start: {line: 145, column: 5},
+					end: {line: 153, column: 51}
+				},
+				_p12)('(min Empty) is not defined');
+		}
+	}
+};
+var _eeue56$elm_all_dict$AllDict$fullEq = F2(
+	function (first, second) {
+		return _elm_lang$core$Native_Utils.eq(
+			_eeue56$elm_all_dict$AllDict$toList(first),
+			_eeue56$elm_all_dict$AllDict$toList(second)) && _elm_lang$core$Native_Utils.eq(
+			_eeue56$elm_all_dict$AllDict$getOrd(first),
+			_eeue56$elm_all_dict$AllDict$getOrd(second));
+	});
+var _eeue56$elm_all_dict$AllDict$eq = F2(
+	function (first, second) {
+		return _elm_lang$core$Native_Utils.eq(
+			_eeue56$elm_all_dict$AllDict$toList(first),
+			_eeue56$elm_all_dict$AllDict$toList(second));
+	});
+var _eeue56$elm_all_dict$AllDict$showLColor = function (color) {
+	var _p14 = color;
+	if (_p14.ctor === 'LBlack') {
+		return 'LBlack';
+	} else {
+		return 'LBBlack';
+	}
+};
+var _eeue56$elm_all_dict$AllDict$showNColor = function (c) {
+	var _p15 = c;
+	switch (_p15.ctor) {
+		case 'Red':
+			return 'Red';
+		case 'Black':
+			return 'Black';
+		case 'BBlack':
+			return 'BBlack';
+		default:
+			return 'NBlack';
+	}
+};
+var _eeue56$elm_all_dict$AllDict$reportRemBug = F4(
+	function (msg, c, lgot, rgot) {
+		return _elm_lang$core$Native_Utils.crash(
+			'AllDict',
+			{
+				start: {line: 365, column: 3},
+				end: {line: 365, column: 14}
+			})(
+			_elm_lang$core$String$concat(
+				{
+					ctor: '::',
+					_0: 'Internal red-black tree invariant violated, expected ',
+					_1: {
+						ctor: '::',
+						_0: msg,
+						_1: {
+							ctor: '::',
+							_0: ' and got ',
+							_1: {
+								ctor: '::',
+								_0: _eeue56$elm_all_dict$AllDict$showNColor(c),
+								_1: {
+									ctor: '::',
+									_0: '/',
+									_1: {
+										ctor: '::',
+										_0: lgot,
+										_1: {
+											ctor: '::',
+											_0: '/',
+											_1: {
+												ctor: '::',
+												_0: rgot,
+												_1: {
+													ctor: '::',
+													_0: '\nPlease report this bug to <https://github.com/elm-lang/Elm/issues>',
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}));
+	});
+var _eeue56$elm_all_dict$AllDict$NBlack = {ctor: 'NBlack'};
+var _eeue56$elm_all_dict$AllDict$BBlack = {ctor: 'BBlack'};
+var _eeue56$elm_all_dict$AllDict$Black = {ctor: 'Black'};
+var _eeue56$elm_all_dict$AllDict$blackish = function (t) {
+	var _p16 = t;
+	if (_p16.ctor === 'RBNode_elm_builtin') {
+		var _p17 = _p16._0;
+		return _elm_lang$core$Native_Utils.eq(_p17, _eeue56$elm_all_dict$AllDict$Black) || _elm_lang$core$Native_Utils.eq(_p17, _eeue56$elm_all_dict$AllDict$BBlack);
+	} else {
+		return true;
+	}
+};
+var _eeue56$elm_all_dict$AllDict$Red = {ctor: 'Red'};
+var _eeue56$elm_all_dict$AllDict$moreBlack = function (color) {
+	var _p18 = color;
+	switch (_p18.ctor) {
+		case 'Black':
+			return _eeue56$elm_all_dict$AllDict$BBlack;
+		case 'Red':
+			return _eeue56$elm_all_dict$AllDict$Black;
+		case 'NBlack':
+			return _eeue56$elm_all_dict$AllDict$Red;
+		default:
+			return _elm_lang$core$Native_Utils.crashCase(
+				'AllDict',
+				{
+					start: {line: 339, column: 5},
+					end: {line: 343, column: 73}
+				},
+				_p18)('Can\'t make a double black node more black!');
+	}
+};
+var _eeue56$elm_all_dict$AllDict$lessBlack = function (color) {
+	var _p20 = color;
+	switch (_p20.ctor) {
+		case 'BBlack':
+			return _eeue56$elm_all_dict$AllDict$Black;
+		case 'Black':
+			return _eeue56$elm_all_dict$AllDict$Red;
+		case 'Red':
+			return _eeue56$elm_all_dict$AllDict$NBlack;
+		default:
+			return _elm_lang$core$Native_Utils.crashCase(
+				'AllDict',
+				{
+					start: {line: 348, column: 5},
+					end: {line: 352, column: 75}
+				},
+				_p20)('Can\'t make a negative black node less black!');
+	}
+};
+var _eeue56$elm_all_dict$AllDict$LBBlack = {ctor: 'LBBlack'};
+var _eeue56$elm_all_dict$AllDict$LBlack = {ctor: 'LBlack'};
+var _eeue56$elm_all_dict$AllDict$RBEmpty_elm_builtin = F2(
+	function (a, b) {
+		return {ctor: 'RBEmpty_elm_builtin', _0: a, _1: b};
+	});
+var _eeue56$elm_all_dict$AllDict$empty = function (ord) {
+	return A2(_eeue56$elm_all_dict$AllDict$RBEmpty_elm_builtin, _eeue56$elm_all_dict$AllDict$LBlack, ord);
+};
+var _eeue56$elm_all_dict$AllDict$RBNode_elm_builtin = F5(
+	function (a, b, c, d, e) {
+		return {ctor: 'RBNode_elm_builtin', _0: a, _1: b, _2: c, _3: d, _4: e};
+	});
+var _eeue56$elm_all_dict$AllDict$ensureBlackRoot = function (dict) {
+	var _p22 = dict;
+	_v32_2:
+	do {
+		if (_p22.ctor === 'RBNode_elm_builtin') {
+			switch (_p22._0.ctor) {
+				case 'Red':
+					return A5(_eeue56$elm_all_dict$AllDict$RBNode_elm_builtin, _eeue56$elm_all_dict$AllDict$Black, _p22._1, _p22._2, _p22._3, _p22._4);
+				case 'Black':
+					return dict;
+				default:
+					break _v32_2;
+			}
+		} else {
+			break _v32_2;
+		}
+	} while(false);
+	return dict;
+};
+var _eeue56$elm_all_dict$AllDict$lessBlackTree = function (dict) {
+	var _p23 = dict;
+	if (_p23.ctor === 'RBNode_elm_builtin') {
+		return A5(
+			_eeue56$elm_all_dict$AllDict$RBNode_elm_builtin,
+			_eeue56$elm_all_dict$AllDict$lessBlack(_p23._0),
+			_p23._1,
+			_p23._2,
+			_p23._3,
+			_p23._4);
+	} else {
+		if (_p23._0.ctor === 'LBBlack') {
+			return A2(_eeue56$elm_all_dict$AllDict$RBEmpty_elm_builtin, _eeue56$elm_all_dict$AllDict$LBlack, _p23._1);
+		} else {
+			return dict;
+		}
+	}
+};
+var _eeue56$elm_all_dict$AllDict$blacken = function (t) {
+	var _p24 = t;
+	if (_p24.ctor === 'RBEmpty_elm_builtin') {
+		return A2(_eeue56$elm_all_dict$AllDict$RBEmpty_elm_builtin, _eeue56$elm_all_dict$AllDict$LBlack, _p24._1);
+	} else {
+		return A5(_eeue56$elm_all_dict$AllDict$RBNode_elm_builtin, _eeue56$elm_all_dict$AllDict$Black, _p24._1, _p24._2, _p24._3, _p24._4);
+	}
+};
+var _eeue56$elm_all_dict$AllDict$redden = function (t) {
+	var _p25 = t;
+	if (_p25.ctor === 'RBEmpty_elm_builtin') {
+		return _elm_lang$core$Native_Utils.crashCase(
+			'AllDict',
+			{
+				start: {line: 486, column: 5},
+				end: {line: 488, column: 69}
+			},
+			_p25)('can\'t make a Leaf red');
+	} else {
+		return A5(_eeue56$elm_all_dict$AllDict$RBNode_elm_builtin, _eeue56$elm_all_dict$AllDict$Red, _p25._1, _p25._2, _p25._3, _p25._4);
+	}
+};
+var _eeue56$elm_all_dict$AllDict$balance_node = function (t) {
+	var assemble = function (col) {
+		return function (xk) {
+			return function (xv) {
+				return function (yk) {
+					return function (yv) {
+						return function (zk) {
+							return function (zv) {
+								return function (a) {
+									return function (b) {
+										return function (c) {
+											return function (d) {
+												return A5(
+													_eeue56$elm_all_dict$AllDict$RBNode_elm_builtin,
+													_eeue56$elm_all_dict$AllDict$lessBlack(col),
+													yk,
+													yv,
+													A5(_eeue56$elm_all_dict$AllDict$RBNode_elm_builtin, _eeue56$elm_all_dict$AllDict$Black, xk, xv, a, b),
+													A5(_eeue56$elm_all_dict$AllDict$RBNode_elm_builtin, _eeue56$elm_all_dict$AllDict$Black, zk, zv, c, d));
+											};
+										};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+	if (_eeue56$elm_all_dict$AllDict$blackish(t)) {
+		var _p27 = t;
+		_v36_6:
+		do {
+			_v36_5:
+			do {
+				_v36_4:
+				do {
+					_v36_3:
+					do {
+						_v36_2:
+						do {
+							_v36_1:
+							do {
+								_v36_0:
+								do {
+									if (_p27.ctor === 'RBNode_elm_builtin') {
+										if (_p27._3.ctor === 'RBNode_elm_builtin') {
+											if (_p27._4.ctor === 'RBNode_elm_builtin') {
+												switch (_p27._3._0.ctor) {
+													case 'Red':
+														switch (_p27._4._0.ctor) {
+															case 'Red':
+																if ((_p27._3._3.ctor === 'RBNode_elm_builtin') && (_p27._3._3._0.ctor === 'Red')) {
+																	break _v36_0;
+																} else {
+																	if ((_p27._3._4.ctor === 'RBNode_elm_builtin') && (_p27._3._4._0.ctor === 'Red')) {
+																		break _v36_1;
+																	} else {
+																		if ((_p27._4._3.ctor === 'RBNode_elm_builtin') && (_p27._4._3._0.ctor === 'Red')) {
+																			break _v36_2;
+																		} else {
+																			if ((_p27._4._4.ctor === 'RBNode_elm_builtin') && (_p27._4._4._0.ctor === 'Red')) {
+																				break _v36_3;
+																			} else {
+																				break _v36_6;
+																			}
+																		}
+																	}
+																}
+															case 'NBlack':
+																if ((_p27._3._3.ctor === 'RBNode_elm_builtin') && (_p27._3._3._0.ctor === 'Red')) {
+																	break _v36_0;
+																} else {
+																	if ((_p27._3._4.ctor === 'RBNode_elm_builtin') && (_p27._3._4._0.ctor === 'Red')) {
+																		break _v36_1;
+																	} else {
+																		if (((_p27._0.ctor === 'BBlack') && (_p27._4._3.ctor === 'RBNode_elm_builtin')) && (_p27._4._3._0.ctor === 'Black')) {
+																			break _v36_4;
+																		} else {
+																			break _v36_6;
+																		}
+																	}
+																}
+															default:
+																if ((_p27._3._3.ctor === 'RBNode_elm_builtin') && (_p27._3._3._0.ctor === 'Red')) {
+																	break _v36_0;
+																} else {
+																	if ((_p27._3._4.ctor === 'RBNode_elm_builtin') && (_p27._3._4._0.ctor === 'Red')) {
+																		break _v36_1;
+																	} else {
+																		break _v36_6;
+																	}
+																}
+														}
+													case 'NBlack':
+														switch (_p27._4._0.ctor) {
+															case 'Red':
+																if ((_p27._4._3.ctor === 'RBNode_elm_builtin') && (_p27._4._3._0.ctor === 'Red')) {
+																	break _v36_2;
+																} else {
+																	if ((_p27._4._4.ctor === 'RBNode_elm_builtin') && (_p27._4._4._0.ctor === 'Red')) {
+																		break _v36_3;
+																	} else {
+																		if (((_p27._0.ctor === 'BBlack') && (_p27._3._4.ctor === 'RBNode_elm_builtin')) && (_p27._3._4._0.ctor === 'Black')) {
+																			break _v36_5;
+																		} else {
+																			break _v36_6;
+																		}
+																	}
+																}
+															case 'NBlack':
+																if (_p27._0.ctor === 'BBlack') {
+																	if ((_p27._4._3.ctor === 'RBNode_elm_builtin') && (_p27._4._3._0.ctor === 'Black')) {
+																		break _v36_4;
+																	} else {
+																		if ((_p27._3._4.ctor === 'RBNode_elm_builtin') && (_p27._3._4._0.ctor === 'Black')) {
+																			break _v36_5;
+																		} else {
+																			break _v36_6;
+																		}
+																	}
+																} else {
+																	break _v36_6;
+																}
+															default:
+																if (((_p27._0.ctor === 'BBlack') && (_p27._3._4.ctor === 'RBNode_elm_builtin')) && (_p27._3._4._0.ctor === 'Black')) {
+																	break _v36_5;
+																} else {
+																	break _v36_6;
+																}
+														}
+													default:
+														switch (_p27._4._0.ctor) {
+															case 'Red':
+																if ((_p27._4._3.ctor === 'RBNode_elm_builtin') && (_p27._4._3._0.ctor === 'Red')) {
+																	break _v36_2;
+																} else {
+																	if ((_p27._4._4.ctor === 'RBNode_elm_builtin') && (_p27._4._4._0.ctor === 'Red')) {
+																		break _v36_3;
+																	} else {
+																		break _v36_6;
+																	}
+																}
+															case 'NBlack':
+																if (((_p27._0.ctor === 'BBlack') && (_p27._4._3.ctor === 'RBNode_elm_builtin')) && (_p27._4._3._0.ctor === 'Black')) {
+																	break _v36_4;
+																} else {
+																	break _v36_6;
+																}
+															default:
+																break _v36_6;
+														}
+												}
+											} else {
+												switch (_p27._3._0.ctor) {
+													case 'Red':
+														if ((_p27._3._3.ctor === 'RBNode_elm_builtin') && (_p27._3._3._0.ctor === 'Red')) {
+															break _v36_0;
+														} else {
+															if ((_p27._3._4.ctor === 'RBNode_elm_builtin') && (_p27._3._4._0.ctor === 'Red')) {
+																break _v36_1;
+															} else {
+																break _v36_6;
+															}
+														}
+													case 'NBlack':
+														if (((_p27._0.ctor === 'BBlack') && (_p27._3._4.ctor === 'RBNode_elm_builtin')) && (_p27._3._4._0.ctor === 'Black')) {
+															break _v36_5;
+														} else {
+															break _v36_6;
+														}
+													default:
+														break _v36_6;
+												}
+											}
+										} else {
+											if (_p27._4.ctor === 'RBNode_elm_builtin') {
+												switch (_p27._4._0.ctor) {
+													case 'Red':
+														if ((_p27._4._3.ctor === 'RBNode_elm_builtin') && (_p27._4._3._0.ctor === 'Red')) {
+															break _v36_2;
+														} else {
+															if ((_p27._4._4.ctor === 'RBNode_elm_builtin') && (_p27._4._4._0.ctor === 'Red')) {
+																break _v36_3;
+															} else {
+																break _v36_6;
+															}
+														}
+													case 'NBlack':
+														if (((_p27._0.ctor === 'BBlack') && (_p27._4._3.ctor === 'RBNode_elm_builtin')) && (_p27._4._3._0.ctor === 'Black')) {
+															break _v36_4;
+														} else {
+															break _v36_6;
+														}
+													default:
+														break _v36_6;
+												}
+											} else {
+												break _v36_6;
+											}
+										}
+									} else {
+										break _v36_6;
+									}
+								} while(false);
+								return assemble(_p27._0)(_p27._3._3._1)(_p27._3._3._2)(_p27._3._1)(_p27._3._2)(_p27._1)(_p27._2)(_p27._3._3._3)(_p27._3._3._4)(_p27._3._4)(_p27._4);
+							} while(false);
+							return assemble(_p27._0)(_p27._3._1)(_p27._3._2)(_p27._3._4._1)(_p27._3._4._2)(_p27._1)(_p27._2)(_p27._3._3)(_p27._3._4._3)(_p27._3._4._4)(_p27._4);
+						} while(false);
+						return assemble(_p27._0)(_p27._1)(_p27._2)(_p27._4._3._1)(_p27._4._3._2)(_p27._4._1)(_p27._4._2)(_p27._3)(_p27._4._3._3)(_p27._4._3._4)(_p27._4._4);
+					} while(false);
+					return assemble(_p27._0)(_p27._1)(_p27._2)(_p27._4._1)(_p27._4._2)(_p27._4._4._1)(_p27._4._4._2)(_p27._3)(_p27._4._3)(_p27._4._4._3)(_p27._4._4._4);
+				} while(false);
+				var _p29 = _p27._4._4;
+				var _p28 = _p29;
+				if ((_p28.ctor === 'RBNode_elm_builtin') && (_p28._0.ctor === 'Black')) {
+					return A5(
+						_eeue56$elm_all_dict$AllDict$RBNode_elm_builtin,
+						_eeue56$elm_all_dict$AllDict$Black,
+						_p27._4._3._1,
+						_p27._4._3._2,
+						A5(_eeue56$elm_all_dict$AllDict$RBNode_elm_builtin, _eeue56$elm_all_dict$AllDict$Black, _p27._1, _p27._2, _p27._3, _p27._4._3._3),
+						A5(
+							_eeue56$elm_all_dict$AllDict$balance,
+							_eeue56$elm_all_dict$AllDict$Black,
+							_p27._4._1,
+							_p27._4._2,
+							_p27._4._3._4,
+							_eeue56$elm_all_dict$AllDict$redden(_p29)));
+				} else {
+					return t;
+				}
+			} while(false);
+			var _p31 = _p27._3._3;
+			var _p30 = _p31;
+			if ((_p30.ctor === 'RBNode_elm_builtin') && (_p30._0.ctor === 'Black')) {
+				return A5(
+					_eeue56$elm_all_dict$AllDict$RBNode_elm_builtin,
+					_eeue56$elm_all_dict$AllDict$Black,
+					_p27._3._4._1,
+					_p27._3._4._2,
+					A5(
+						_eeue56$elm_all_dict$AllDict$balance,
+						_eeue56$elm_all_dict$AllDict$Black,
+						_p27._3._1,
+						_p27._3._2,
+						_eeue56$elm_all_dict$AllDict$redden(_p31),
+						_p27._3._4._3),
+					A5(_eeue56$elm_all_dict$AllDict$RBNode_elm_builtin, _eeue56$elm_all_dict$AllDict$Black, _p27._1, _p27._2, _p27._3._4._4, _p27._4));
+			} else {
+				return t;
+			}
+		} while(false);
+		return t;
+	} else {
+		return t;
+	}
+};
+var _eeue56$elm_all_dict$AllDict$balance = F5(
+	function (c, k, v, l, r) {
+		return _eeue56$elm_all_dict$AllDict$balance_node(
+			A5(_eeue56$elm_all_dict$AllDict$RBNode_elm_builtin, c, k, v, l, r));
+	});
+var _eeue56$elm_all_dict$AllDict$bubble = F5(
+	function (c, k, v, l, r) {
+		return (_eeue56$elm_all_dict$AllDict$isBBlack(l) || _eeue56$elm_all_dict$AllDict$isBBlack(r)) ? A5(
+			_eeue56$elm_all_dict$AllDict$balance,
+			_eeue56$elm_all_dict$AllDict$moreBlack(c),
+			k,
+			v,
+			_eeue56$elm_all_dict$AllDict$lessBlackTree(l),
+			_eeue56$elm_all_dict$AllDict$lessBlackTree(r)) : A5(_eeue56$elm_all_dict$AllDict$RBNode_elm_builtin, c, k, v, l, r);
+	});
+var _eeue56$elm_all_dict$AllDict$remove_max = F5(
+	function (c, k, v, l, r) {
+		var _p32 = r;
+		if (_p32.ctor === 'RBEmpty_elm_builtin') {
+			return A3(_eeue56$elm_all_dict$AllDict$rem, c, l, r);
+		} else {
+			return A5(
+				_eeue56$elm_all_dict$AllDict$bubble,
+				c,
+				k,
+				v,
+				l,
+				A5(_eeue56$elm_all_dict$AllDict$remove_max, _p32._0, _p32._1, _p32._2, _p32._3, _p32._4));
+		}
+	});
+var _eeue56$elm_all_dict$AllDict$rem = F3(
+	function (c, l, r) {
+		var _p33 = {ctor: '_Tuple2', _0: l, _1: r};
+		if (_p33._0.ctor === 'RBEmpty_elm_builtin') {
+			if (_p33._1.ctor === 'RBEmpty_elm_builtin') {
+				var _p35 = _p33._0._1;
+				var _p34 = c;
+				switch (_p34.ctor) {
+					case 'Red':
+						return A2(_eeue56$elm_all_dict$AllDict$RBEmpty_elm_builtin, _eeue56$elm_all_dict$AllDict$LBlack, _p35);
+					case 'Black':
+						return A2(_eeue56$elm_all_dict$AllDict$RBEmpty_elm_builtin, _eeue56$elm_all_dict$AllDict$LBBlack, _p35);
+					default:
+						return _eeue56$elm_all_dict$Native_Debug.crash('cannot have bblack or nblack nodes at this point');
+				}
+			} else {
+				var _p38 = _p33._1._0;
+				var _p37 = _p33._0._0;
+				var _p36 = {ctor: '_Tuple3', _0: c, _1: _p37, _2: _p38};
+				if ((((_p36.ctor === '_Tuple3') && (_p36._0.ctor === 'Black')) && (_p36._1.ctor === 'LBlack')) && (_p36._2.ctor === 'Red')) {
+					return A5(_eeue56$elm_all_dict$AllDict$RBNode_elm_builtin, _eeue56$elm_all_dict$AllDict$Black, _p33._1._1, _p33._1._2, _p33._1._3, _p33._1._4);
+				} else {
+					return A4(
+						_eeue56$elm_all_dict$AllDict$reportRemBug,
+						'Black/LBlack/Red',
+						c,
+						_eeue56$elm_all_dict$AllDict$showLColor(_p37),
+						_eeue56$elm_all_dict$AllDict$showNColor(_p38));
+				}
+			}
+		} else {
+			if (_p33._1.ctor === 'RBEmpty_elm_builtin') {
+				var _p41 = _p33._1._0;
+				var _p40 = _p33._0._0;
+				var _p39 = {ctor: '_Tuple3', _0: c, _1: _p40, _2: _p41};
+				if ((((_p39.ctor === '_Tuple3') && (_p39._0.ctor === 'Black')) && (_p39._1.ctor === 'Red')) && (_p39._2.ctor === 'LBlack')) {
+					return A5(_eeue56$elm_all_dict$AllDict$RBNode_elm_builtin, _eeue56$elm_all_dict$AllDict$Black, _p33._0._1, _p33._0._2, _p33._0._3, _p33._0._4);
+				} else {
+					return A4(
+						_eeue56$elm_all_dict$AllDict$reportRemBug,
+						'Black/Red/LBlack',
+						c,
+						_eeue56$elm_all_dict$AllDict$showNColor(_p40),
+						_eeue56$elm_all_dict$AllDict$showLColor(_p41));
+				}
+			} else {
+				var _p47 = _p33._0._2;
+				var _p46 = _p33._0._4;
+				var _p45 = _p33._0._3;
+				var _p44 = _p33._0._1;
+				var _p43 = _p33._0._0;
+				var l_ = A5(_eeue56$elm_all_dict$AllDict$remove_max, _p43, _p44, _p47, _p45, _p46);
+				var r = A5(_eeue56$elm_all_dict$AllDict$RBNode_elm_builtin, _p33._1._0, _p33._1._1, _p33._1._2, _p33._1._3, _p33._1._4);
+				var l = A5(_eeue56$elm_all_dict$AllDict$RBNode_elm_builtin, _p43, _p44, _p47, _p45, _p46);
+				var _p42 = _eeue56$elm_all_dict$AllDict$max(l);
+				var k = _p42._0;
+				var v = _p42._1;
+				return A5(_eeue56$elm_all_dict$AllDict$bubble, c, k, v, l_, r);
+			}
+		}
+	});
+var _eeue56$elm_all_dict$AllDict$map = F2(
+	function (f, dict) {
+		var _p48 = dict;
+		if (_p48.ctor === 'RBEmpty_elm_builtin') {
+			return A2(_eeue56$elm_all_dict$AllDict$RBEmpty_elm_builtin, _p48._0, _p48._1);
+		} else {
+			var _p49 = _p48._1;
+			return A5(
+				_eeue56$elm_all_dict$AllDict$RBNode_elm_builtin,
+				_p48._0,
+				_p49,
+				A2(f, _p49, _p48._2),
+				A2(_eeue56$elm_all_dict$AllDict$map, f, _p48._3),
+				A2(_eeue56$elm_all_dict$AllDict$map, f, _p48._4));
+		}
+	});
+var _eeue56$elm_all_dict$AllDict$Same = {ctor: 'Same'};
+var _eeue56$elm_all_dict$AllDict$Remove = {ctor: 'Remove'};
+var _eeue56$elm_all_dict$AllDict$Insert = {ctor: 'Insert'};
+var _eeue56$elm_all_dict$AllDict$update = F3(
+	function (k, alter, dict) {
+		var ord = _eeue56$elm_all_dict$AllDict$getOrd(dict);
+		var empty_ = _eeue56$elm_all_dict$AllDict$empty(ord);
+		var up = function (dict) {
+			var _p50 = dict;
+			if (_p50.ctor === 'RBEmpty_elm_builtin') {
+				var _p51 = alter(_elm_lang$core$Maybe$Nothing);
+				if (_p51.ctor === 'Nothing') {
+					return {ctor: '_Tuple2', _0: _eeue56$elm_all_dict$AllDict$Same, _1: empty_};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _eeue56$elm_all_dict$AllDict$Insert,
+						_1: A5(_eeue56$elm_all_dict$AllDict$RBNode_elm_builtin, _eeue56$elm_all_dict$AllDict$Red, k, _p51._0, empty_, empty_)
+					};
+				}
+			} else {
+				var _p62 = _p50._2;
+				var _p61 = _p50._4;
+				var _p60 = _p50._3;
+				var _p59 = _p50._1;
+				var _p58 = _p50._0;
+				var _p52 = A2(
+					_elm_lang$core$Basics$compare,
+					ord(k),
+					ord(_p59));
+				switch (_p52.ctor) {
+					case 'EQ':
+						var _p53 = alter(
+							_elm_lang$core$Maybe$Just(_p62));
+						if (_p53.ctor === 'Nothing') {
+							return {
+								ctor: '_Tuple2',
+								_0: _eeue56$elm_all_dict$AllDict$Remove,
+								_1: A3(_eeue56$elm_all_dict$AllDict$rem, _p58, _p60, _p61)
+							};
+						} else {
+							return {
+								ctor: '_Tuple2',
+								_0: _eeue56$elm_all_dict$AllDict$Same,
+								_1: A5(_eeue56$elm_all_dict$AllDict$RBNode_elm_builtin, _p58, _p59, _p53._0, _p60, _p61)
+							};
+						}
+					case 'LT':
+						var _p54 = up(_p60);
+						var flag = _p54._0;
+						var newLeft = _p54._1;
+						var _p55 = flag;
+						switch (_p55.ctor) {
+							case 'Same':
+								return {
+									ctor: '_Tuple2',
+									_0: _eeue56$elm_all_dict$AllDict$Same,
+									_1: A5(_eeue56$elm_all_dict$AllDict$RBNode_elm_builtin, _p58, _p59, _p62, newLeft, _p61)
+								};
+							case 'Insert':
+								return {
+									ctor: '_Tuple2',
+									_0: _eeue56$elm_all_dict$AllDict$Insert,
+									_1: A5(_eeue56$elm_all_dict$AllDict$balance, _p58, _p59, _p62, newLeft, _p61)
+								};
+							default:
+								return {
+									ctor: '_Tuple2',
+									_0: _eeue56$elm_all_dict$AllDict$Remove,
+									_1: A5(_eeue56$elm_all_dict$AllDict$bubble, _p58, _p59, _p62, newLeft, _p61)
+								};
+						}
+					default:
+						var _p56 = up(_p61);
+						var flag = _p56._0;
+						var newRight = _p56._1;
+						var _p57 = flag;
+						switch (_p57.ctor) {
+							case 'Same':
+								return {
+									ctor: '_Tuple2',
+									_0: _eeue56$elm_all_dict$AllDict$Same,
+									_1: A5(_eeue56$elm_all_dict$AllDict$RBNode_elm_builtin, _p58, _p59, _p62, _p60, newRight)
+								};
+							case 'Insert':
+								return {
+									ctor: '_Tuple2',
+									_0: _eeue56$elm_all_dict$AllDict$Insert,
+									_1: A5(_eeue56$elm_all_dict$AllDict$balance, _p58, _p59, _p62, _p60, newRight)
+								};
+							default:
+								return {
+									ctor: '_Tuple2',
+									_0: _eeue56$elm_all_dict$AllDict$Remove,
+									_1: A5(_eeue56$elm_all_dict$AllDict$bubble, _p58, _p59, _p62, _p60, newRight)
+								};
+						}
+				}
+			}
+		};
+		var _p63 = up(dict);
+		var flag = _p63._0;
+		var updatedDict = _p63._1;
+		var _p64 = flag;
+		switch (_p64.ctor) {
+			case 'Same':
+				return updatedDict;
+			case 'Insert':
+				return _eeue56$elm_all_dict$AllDict$ensureBlackRoot(updatedDict);
+			default:
+				return _eeue56$elm_all_dict$AllDict$blacken(updatedDict);
+		}
+	});
+var _eeue56$elm_all_dict$AllDict$insert = F3(
+	function (key, value, dict) {
+		return A3(
+			_eeue56$elm_all_dict$AllDict$update,
+			key,
+			_elm_lang$core$Basics$always(
+				_elm_lang$core$Maybe$Just(value)),
+			dict);
+	});
+var _eeue56$elm_all_dict$AllDict$singleton = F3(
+	function (ord, key, value) {
+		return A3(
+			_eeue56$elm_all_dict$AllDict$insert,
+			key,
+			value,
+			_eeue56$elm_all_dict$AllDict$empty(ord));
+	});
+var _eeue56$elm_all_dict$AllDict$union = F2(
+	function (t1, t2) {
+		return A3(_eeue56$elm_all_dict$AllDict$foldl, _eeue56$elm_all_dict$AllDict$insert, t2, t1);
+	});
+var _eeue56$elm_all_dict$AllDict$fromList = F2(
+	function (ord, assocs) {
+		return A3(
+			_elm_lang$core$List$foldl,
+			F2(
+				function (_p65, dict) {
+					var _p66 = _p65;
+					return A3(_eeue56$elm_all_dict$AllDict$insert, _p66._0, _p66._1, dict);
+				}),
+			_eeue56$elm_all_dict$AllDict$empty(ord),
+			assocs);
+	});
+var _eeue56$elm_all_dict$AllDict$filter = F2(
+	function (predicate, dictionary) {
+		var add = F3(
+			function (key, value, dict) {
+				return A2(predicate, key, value) ? A3(_eeue56$elm_all_dict$AllDict$insert, key, value, dict) : dict;
+			});
+		return A3(
+			_eeue56$elm_all_dict$AllDict$foldl,
+			add,
+			_eeue56$elm_all_dict$AllDict$empty(
+				_eeue56$elm_all_dict$AllDict$getOrd(dictionary)),
+			dictionary);
+	});
+var _eeue56$elm_all_dict$AllDict$intersect = F2(
+	function (t1, t2) {
+		return A2(
+			_eeue56$elm_all_dict$AllDict$filter,
+			F2(
+				function (k, _p67) {
+					return A2(_eeue56$elm_all_dict$AllDict$member, k, t2);
+				}),
+			t1);
+	});
+var _eeue56$elm_all_dict$AllDict$partition = F2(
+	function (predicate, dict) {
+		var ord = _eeue56$elm_all_dict$AllDict$getOrd(dict);
+		var add = F3(
+			function (key, value, _p68) {
+				var _p69 = _p68;
+				var _p71 = _p69._1;
+				var _p70 = _p69._0;
+				return A2(predicate, key, value) ? {
+					ctor: '_Tuple2',
+					_0: A3(_eeue56$elm_all_dict$AllDict$insert, key, value, _p70),
+					_1: _p71
+				} : {
+					ctor: '_Tuple2',
+					_0: _p70,
+					_1: A3(_eeue56$elm_all_dict$AllDict$insert, key, value, _p71)
+				};
+			});
+		return A3(
+			_eeue56$elm_all_dict$AllDict$foldl,
+			add,
+			{
+				ctor: '_Tuple2',
+				_0: _eeue56$elm_all_dict$AllDict$empty(ord),
+				_1: _eeue56$elm_all_dict$AllDict$empty(ord)
+			},
+			dict);
+	});
+var _eeue56$elm_all_dict$AllDict$remove = F2(
+	function (key, dict) {
+		return A3(
+			_eeue56$elm_all_dict$AllDict$update,
+			key,
+			_elm_lang$core$Basics$always(_elm_lang$core$Maybe$Nothing),
+			dict);
+	});
+var _eeue56$elm_all_dict$AllDict$diff = F2(
+	function (t1, t2) {
+		return A3(
+			_eeue56$elm_all_dict$AllDict$foldl,
+			F3(
+				function (k, v, t) {
+					return A2(_eeue56$elm_all_dict$AllDict$remove, k, t);
+				}),
+			t1,
+			t2);
+	});
+
 var _elm_lang$core$Task$onError = _elm_lang$core$Native_Scheduler.onError;
 var _elm_lang$core$Task$andThen = _elm_lang$core$Native_Scheduler.andThen;
 var _elm_lang$core$Task$spawnCmd = F2(
@@ -10514,21 +11542,26 @@ var _elm_lang$core$Time$subMap = F2(
 	});
 _elm_lang$core$Native_Platform.effectManagers['Time'] = {pkg: 'elm-lang/core', init: _elm_lang$core$Time$init, onEffects: _elm_lang$core$Time$onEffects, onSelfMsg: _elm_lang$core$Time$onSelfMsg, tag: 'sub', subMap: _elm_lang$core$Time$subMap};
 
+var _elm_lang$html$Seed$grape = {name: 'Grape', maturity: 120, color: 'purple', description: 'Reaches maturity in 120s', image: 'https://image.flaticon.com/icons/svg/135/135542.svg', cost: 30};
+var _elm_lang$html$Seed$lettuce = {name: 'Lettuce', maturity: 90, color: 'green', description: 'Reaches maturity in 90s', image: 'https://image.flaticon.com/icons/svg/135/135699.svg', cost: 25};
+var _elm_lang$html$Seed$banana = {name: 'Banana', maturity: 60, color: 'yellow', description: 'Reaches maturity in 60s', image: 'https://image.flaticon.com/icons/svg/135/135631.svg', cost: 15};
+var _elm_lang$html$Seed$orange = {name: 'Orange', maturity: 40, color: 'orange', description: 'Reaches maturity in 40s', image: 'https://image.flaticon.com/icons/svg/135/135620.svg', cost: 12};
+var _elm_lang$html$Seed$apple = {name: 'Apple', maturity: 30, color: 'red', description: 'Reaches maturity in 30s', image: 'https://image.flaticon.com/icons/svg/135/135728.svg', cost: 10};
 var _elm_lang$html$Seed$allSeeds = {
 	ctor: '::',
-	_0: {name: 'Apple', maturity: 30, color: 'red', description: 'Reaches maturity in 30s', image: 'https://image.flaticon.com/icons/svg/135/135728.svg', cost: 10},
+	_0: _elm_lang$html$Seed$apple,
 	_1: {
 		ctor: '::',
-		_0: {name: 'Orange', maturity: 40, color: 'orange', description: 'Reaches maturity in 40s', image: 'https://image.flaticon.com/icons/svg/135/135620.svg', cost: 12},
+		_0: _elm_lang$html$Seed$orange,
 		_1: {
 			ctor: '::',
-			_0: {name: 'Banana', maturity: 60, color: 'yellow', description: 'Reaches maturity in 60s', image: 'https://image.flaticon.com/icons/svg/135/135631.svg', cost: 15},
+			_0: _elm_lang$html$Seed$banana,
 			_1: {
 				ctor: '::',
-				_0: {name: 'Lettuce', maturity: 90, color: 'green', description: 'Reaches maturity in 90s', image: 'https://image.flaticon.com/icons/svg/135/135699.svg', cost: 25},
+				_0: _elm_lang$html$Seed$lettuce,
 				_1: {
 					ctor: '::',
-					_0: {name: 'Grape', maturity: 120, color: 'purple', description: 'Reaches maturity in 120s', image: 'https://image.flaticon.com/icons/svg/135/135542.svg', cost: 30},
+					_0: _elm_lang$html$Seed$grape,
 					_1: {ctor: '[]'}
 				}
 			}
@@ -10538,6 +11571,478 @@ var _elm_lang$html$Seed$allSeeds = {
 var _elm_lang$html$Seed$Seed = F6(
 	function (a, b, c, d, e, f) {
 		return {name: a, maturity: b, color: c, description: d, image: e, cost: f};
+	});
+
+var _elm_lang$html$Inventory$removeSeedFromInventory = F2(
+	function (seed, inventory) {
+		var update = function (count) {
+			return A2(
+				_elm_lang$core$Maybe$map,
+				function (i) {
+					return i - 1;
+				},
+				count);
+		};
+		return _elm_lang$core$Native_Utils.eq(
+			A2(
+				_elm_lang$core$Maybe$map,
+				function (i) {
+					return _elm_lang$core$Native_Utils.cmp(i, 0) > 0;
+				},
+				A2(_eeue56$elm_all_dict$AllDict$get, seed, inventory)),
+			_elm_lang$core$Maybe$Just(true)) ? A3(_eeue56$elm_all_dict$AllDict$update, seed, update, inventory) : A2(_eeue56$elm_all_dict$AllDict$remove, seed, inventory);
+	});
+var _elm_lang$html$Inventory$init = A2(
+	_eeue56$elm_all_dict$AllDict$fromList,
+	function (_) {
+		return _.name;
+	},
+	{
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: _elm_lang$html$Seed$apple, _1: 10},
+		_1: {
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: _elm_lang$html$Seed$orange, _1: 5},
+			_1: {ctor: '[]'}
+		}
+	});
+
+var _elm_lang$html$Html_Events$keyCode = A2(_elm_lang$core$Json_Decode$field, 'keyCode', _elm_lang$core$Json_Decode$int);
+var _elm_lang$html$Html_Events$targetChecked = A2(
+	_elm_lang$core$Json_Decode$at,
+	{
+		ctor: '::',
+		_0: 'target',
+		_1: {
+			ctor: '::',
+			_0: 'checked',
+			_1: {ctor: '[]'}
+		}
+	},
+	_elm_lang$core$Json_Decode$bool);
+var _elm_lang$html$Html_Events$targetValue = A2(
+	_elm_lang$core$Json_Decode$at,
+	{
+		ctor: '::',
+		_0: 'target',
+		_1: {
+			ctor: '::',
+			_0: 'value',
+			_1: {ctor: '[]'}
+		}
+	},
+	_elm_lang$core$Json_Decode$string);
+var _elm_lang$html$Html_Events$defaultOptions = _elm_lang$virtual_dom$VirtualDom$defaultOptions;
+var _elm_lang$html$Html_Events$onWithOptions = _elm_lang$virtual_dom$VirtualDom$onWithOptions;
+var _elm_lang$html$Html_Events$on = _elm_lang$virtual_dom$VirtualDom$on;
+var _elm_lang$html$Html_Events$onFocus = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'focus',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onBlur = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'blur',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onSubmitOptions = _elm_lang$core$Native_Utils.update(
+	_elm_lang$html$Html_Events$defaultOptions,
+	{preventDefault: true});
+var _elm_lang$html$Html_Events$onSubmit = function (msg) {
+	return A3(
+		_elm_lang$html$Html_Events$onWithOptions,
+		'submit',
+		_elm_lang$html$Html_Events$onSubmitOptions,
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onCheck = function (tagger) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'change',
+		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$html$Html_Events$targetChecked));
+};
+var _elm_lang$html$Html_Events$onInput = function (tagger) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'input',
+		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$html$Html_Events$targetValue));
+};
+var _elm_lang$html$Html_Events$onMouseOut = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseout',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseOver = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseover',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseLeave = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseleave',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseEnter = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseenter',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseUp = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseup',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseDown = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mousedown',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onDoubleClick = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'dblclick',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onClick = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'click',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$Options = F2(
+	function (a, b) {
+		return {stopPropagation: a, preventDefault: b};
+	});
+
+var _norpan$elm_html5_drag_drop$Html5_DragDrop$getDroppablePosition = function (model) {
+	var _p0 = model;
+	if (_p0.ctor === 'DraggedOver') {
+		return _p0._2;
+	} else {
+		return _elm_lang$core$Maybe$Nothing;
+	}
+};
+var _norpan$elm_html5_drag_drop$Html5_DragDrop$getDropId = function (model) {
+	var _p1 = model;
+	switch (_p1.ctor) {
+		case 'NotDragging':
+			return _elm_lang$core$Maybe$Nothing;
+		case 'Dragging':
+			return _elm_lang$core$Maybe$Nothing;
+		default:
+			return _elm_lang$core$Maybe$Just(_p1._1);
+	}
+};
+var _norpan$elm_html5_drag_drop$Html5_DragDrop$getDragId = function (model) {
+	var _p2 = model;
+	switch (_p2.ctor) {
+		case 'NotDragging':
+			return _elm_lang$core$Maybe$Nothing;
+		case 'Dragging':
+			return _elm_lang$core$Maybe$Just(_p2._0);
+		default:
+			return _elm_lang$core$Maybe$Just(_p2._0);
+	}
+};
+var _norpan$elm_html5_drag_drop$Html5_DragDrop$Position = F4(
+	function (a, b, c, d) {
+		return {width: a, height: b, x: c, y: d};
+	});
+var _norpan$elm_html5_drag_drop$Html5_DragDrop$positionDecoder = A5(
+	_elm_lang$core$Json_Decode$map4,
+	_norpan$elm_html5_drag_drop$Html5_DragDrop$Position,
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'target',
+			_1: {
+				ctor: '::',
+				_0: 'clientWidth',
+				_1: {ctor: '[]'}
+			}
+		},
+		_elm_lang$core$Json_Decode$int),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'target',
+			_1: {
+				ctor: '::',
+				_0: 'clientHeight',
+				_1: {ctor: '[]'}
+			}
+		},
+		_elm_lang$core$Json_Decode$int),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'offsetX',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$int),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'offsetY',
+			_1: {ctor: '[]'}
+		},
+		_elm_lang$core$Json_Decode$int));
+var _norpan$elm_html5_drag_drop$Html5_DragDrop$DraggedOver = F3(
+	function (a, b, c) {
+		return {ctor: 'DraggedOver', _0: a, _1: b, _2: c};
+	});
+var _norpan$elm_html5_drag_drop$Html5_DragDrop$Dragging = function (a) {
+	return {ctor: 'Dragging', _0: a};
+};
+var _norpan$elm_html5_drag_drop$Html5_DragDrop$NotDragging = {ctor: 'NotDragging'};
+var _norpan$elm_html5_drag_drop$Html5_DragDrop$init = _norpan$elm_html5_drag_drop$Html5_DragDrop$NotDragging;
+var _norpan$elm_html5_drag_drop$Html5_DragDrop$updateCommon = F3(
+	function (sticky, msg, model) {
+		var _p3 = {ctor: '_Tuple3', _0: msg, _1: model, _2: sticky};
+		_v3_9:
+		do {
+			if (_p3.ctor === '_Tuple3') {
+				switch (_p3._0.ctor) {
+					case 'DragStart':
+						return {
+							ctor: '_Tuple2',
+							_0: _norpan$elm_html5_drag_drop$Html5_DragDrop$Dragging(_p3._0._0),
+							_1: _elm_lang$core$Maybe$Nothing
+						};
+					case 'DragEnd':
+						return {ctor: '_Tuple2', _0: _norpan$elm_html5_drag_drop$Html5_DragDrop$NotDragging, _1: _elm_lang$core$Maybe$Nothing};
+					case 'DragEnter':
+						switch (_p3._1.ctor) {
+							case 'Dragging':
+								return {
+									ctor: '_Tuple2',
+									_0: A3(_norpan$elm_html5_drag_drop$Html5_DragDrop$DraggedOver, _p3._1._0, _p3._0._0, _elm_lang$core$Maybe$Nothing),
+									_1: _elm_lang$core$Maybe$Nothing
+								};
+							case 'DraggedOver':
+								return {
+									ctor: '_Tuple2',
+									_0: A3(_norpan$elm_html5_drag_drop$Html5_DragDrop$DraggedOver, _p3._1._0, _p3._0._0, _p3._1._2),
+									_1: _elm_lang$core$Maybe$Nothing
+								};
+							default:
+								break _v3_9;
+						}
+					case 'DragLeave':
+						if ((_p3._1.ctor === 'DraggedOver') && (_p3._2 === false)) {
+							return _elm_lang$core$Native_Utils.eq(_p3._0._0, _p3._1._1) ? {
+								ctor: '_Tuple2',
+								_0: _norpan$elm_html5_drag_drop$Html5_DragDrop$Dragging(_p3._1._0),
+								_1: _elm_lang$core$Maybe$Nothing
+							} : {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Maybe$Nothing};
+						} else {
+							break _v3_9;
+						}
+					case 'DragOver':
+						switch (_p3._1.ctor) {
+							case 'Dragging':
+								return {
+									ctor: '_Tuple2',
+									_0: A3(
+										_norpan$elm_html5_drag_drop$Html5_DragDrop$DraggedOver,
+										_p3._1._0,
+										_p3._0._0,
+										_elm_lang$core$Maybe$Just(_p3._0._1)),
+									_1: _elm_lang$core$Maybe$Nothing
+								};
+							case 'DraggedOver':
+								var _p5 = _p3._0._1;
+								var _p4 = _p3._0._0;
+								return (_elm_lang$core$Native_Utils.eq(
+									_elm_lang$core$Maybe$Just(_p5),
+									_p3._1._2) && _elm_lang$core$Native_Utils.eq(_p4, _p3._1._1)) ? {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Maybe$Nothing} : {
+									ctor: '_Tuple2',
+									_0: A3(
+										_norpan$elm_html5_drag_drop$Html5_DragDrop$DraggedOver,
+										_p3._1._0,
+										_p4,
+										_elm_lang$core$Maybe$Just(_p5)),
+									_1: _elm_lang$core$Maybe$Nothing
+								};
+							default:
+								break _v3_9;
+						}
+					default:
+						switch (_p3._1.ctor) {
+							case 'Dragging':
+								return {
+									ctor: '_Tuple2',
+									_0: _norpan$elm_html5_drag_drop$Html5_DragDrop$NotDragging,
+									_1: _elm_lang$core$Maybe$Just(
+										{ctor: '_Tuple3', _0: _p3._1._0, _1: _p3._0._0, _2: _p3._0._1})
+								};
+							case 'DraggedOver':
+								return {
+									ctor: '_Tuple2',
+									_0: _norpan$elm_html5_drag_drop$Html5_DragDrop$NotDragging,
+									_1: _elm_lang$core$Maybe$Just(
+										{ctor: '_Tuple3', _0: _p3._1._0, _1: _p3._0._0, _2: _p3._0._1})
+								};
+							default:
+								break _v3_9;
+						}
+				}
+			} else {
+				break _v3_9;
+			}
+		} while(false);
+		return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Maybe$Nothing};
+	});
+var _norpan$elm_html5_drag_drop$Html5_DragDrop$update = _norpan$elm_html5_drag_drop$Html5_DragDrop$updateCommon(false);
+var _norpan$elm_html5_drag_drop$Html5_DragDrop$updateSticky = _norpan$elm_html5_drag_drop$Html5_DragDrop$updateCommon(true);
+var _norpan$elm_html5_drag_drop$Html5_DragDrop$Drop = F2(
+	function (a, b) {
+		return {ctor: 'Drop', _0: a, _1: b};
+	});
+var _norpan$elm_html5_drag_drop$Html5_DragDrop$DragOver = F2(
+	function (a, b) {
+		return {ctor: 'DragOver', _0: a, _1: b};
+	});
+var _norpan$elm_html5_drag_drop$Html5_DragDrop$DragLeave = function (a) {
+	return {ctor: 'DragLeave', _0: a};
+};
+var _norpan$elm_html5_drag_drop$Html5_DragDrop$DragEnter = function (a) {
+	return {ctor: 'DragEnter', _0: a};
+};
+var _norpan$elm_html5_drag_drop$Html5_DragDrop$droppable = F2(
+	function (wrap, dropId) {
+		return {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html_Events$on,
+				'dragenter',
+				_elm_lang$core$Json_Decode$succeed(
+					wrap(
+						_norpan$elm_html5_drag_drop$Html5_DragDrop$DragEnter(dropId)))),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html_Events$on,
+					'dragleave',
+					_elm_lang$core$Json_Decode$succeed(
+						wrap(
+							_norpan$elm_html5_drag_drop$Html5_DragDrop$DragLeave(dropId)))),
+				_1: {
+					ctor: '::',
+					_0: A3(
+						_elm_lang$html$Html_Events$onWithOptions,
+						'drop',
+						{stopPropagation: true, preventDefault: true},
+						A2(
+							_elm_lang$core$Json_Decode$map,
+							function (_p6) {
+								return wrap(
+									A2(_norpan$elm_html5_drag_drop$Html5_DragDrop$Drop, dropId, _p6));
+							},
+							_norpan$elm_html5_drag_drop$Html5_DragDrop$positionDecoder)),
+					_1: {
+						ctor: '::',
+						_0: A2(_elm_lang$html$Html_Attributes$attribute, 'ondragover', 'event.stopPropagation(); event.preventDefault();'),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		};
+	});
+var _norpan$elm_html5_drag_drop$Html5_DragDrop$droppableWithPosition = F2(
+	function (wrap, dropId) {
+		return {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html_Events$on,
+				'dragenter',
+				_elm_lang$core$Json_Decode$succeed(
+					wrap(
+						_norpan$elm_html5_drag_drop$Html5_DragDrop$DragEnter(dropId)))),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html_Events$on,
+					'dragleave',
+					_elm_lang$core$Json_Decode$succeed(
+						wrap(
+							_norpan$elm_html5_drag_drop$Html5_DragDrop$DragLeave(dropId)))),
+				_1: {
+					ctor: '::',
+					_0: A3(
+						_elm_lang$html$Html_Events$onWithOptions,
+						'dragover',
+						{stopPropagation: true, preventDefault: true},
+						A2(
+							_elm_lang$core$Json_Decode$map,
+							function (_p7) {
+								return wrap(
+									A2(_norpan$elm_html5_drag_drop$Html5_DragDrop$DragOver, dropId, _p7));
+							},
+							_norpan$elm_html5_drag_drop$Html5_DragDrop$positionDecoder)),
+					_1: {
+						ctor: '::',
+						_0: A3(
+							_elm_lang$html$Html_Events$onWithOptions,
+							'drop',
+							{stopPropagation: true, preventDefault: true},
+							A2(
+								_elm_lang$core$Json_Decode$map,
+								function (_p8) {
+									return wrap(
+										A2(_norpan$elm_html5_drag_drop$Html5_DragDrop$Drop, dropId, _p8));
+								},
+								_norpan$elm_html5_drag_drop$Html5_DragDrop$positionDecoder)),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		};
+	});
+var _norpan$elm_html5_drag_drop$Html5_DragDrop$DragEnd = {ctor: 'DragEnd'};
+var _norpan$elm_html5_drag_drop$Html5_DragDrop$DragStart = function (a) {
+	return {ctor: 'DragStart', _0: a};
+};
+var _norpan$elm_html5_drag_drop$Html5_DragDrop$draggable = F2(
+	function (wrap, drag) {
+		return {
+			ctor: '::',
+			_0: A2(_elm_lang$html$Html_Attributes$attribute, 'draggable', 'true'),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html_Events$on,
+					'dragstart',
+					_elm_lang$core$Json_Decode$succeed(
+						wrap(
+							_norpan$elm_html5_drag_drop$Html5_DragDrop$DragStart(drag)))),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html_Events$on,
+						'dragend',
+						_elm_lang$core$Json_Decode$succeed(
+							wrap(_norpan$elm_html5_drag_drop$Html5_DragDrop$DragEnd))),
+					_1: {
+						ctor: '::',
+						_0: A2(_elm_lang$html$Html_Attributes$attribute, 'ondragstart', 'event.dataTransfer.setData(\'text/plain\', \'\');'),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		};
 	});
 
 var _elm_lang$html$Messages$HarvestSeed = F3(
@@ -10550,6 +12055,9 @@ var _elm_lang$html$Messages$PlantSeed = F3(
 	});
 var _elm_lang$html$Messages$SelectSeed = function (a) {
 	return {ctor: 'SelectSeed', _0: a};
+};
+var _elm_lang$html$Messages$DragDropMsg = function (a) {
+	return {ctor: 'DragDropMsg', _0: a};
 };
 var _elm_lang$html$Messages$NoOp = {ctor: 'NoOp'};
 var _elm_lang$html$Messages$Tick = function (a) {
@@ -10776,129 +12284,20 @@ var _elm_lang$html$Model$initialModel = function () {
 	return {
 		time: 0,
 		garden: A3(_tortus$elm_array_2d$Array2D$repeat, size, size, _elm_lang$core$Maybe$Nothing),
+		inventory: _elm_lang$html$Inventory$init,
 		selected: _elm_lang$core$Maybe$Nothing,
-		bank: 100
+		bank: 100,
+		seedDragDrop: {dragDrop: _norpan$elm_html5_drag_drop$Html5_DragDrop$init, hoverPos: _elm_lang$core$Maybe$Nothing}
 	};
 }();
 var _elm_lang$html$Model$init = {ctor: '_Tuple2', _0: _elm_lang$html$Model$initialModel, _1: _elm_lang$core$Platform_Cmd$none};
-var _elm_lang$html$Model$Model = F4(
-	function (a, b, c, d) {
-		return {time: a, garden: b, selected: c, bank: d};
+var _elm_lang$html$Model$Model = F6(
+	function (a, b, c, d, e, f) {
+		return {time: a, garden: b, inventory: c, selected: d, bank: e, seedDragDrop: f};
 	});
-
-var _elm_lang$html$Html_Events$keyCode = A2(_elm_lang$core$Json_Decode$field, 'keyCode', _elm_lang$core$Json_Decode$int);
-var _elm_lang$html$Html_Events$targetChecked = A2(
-	_elm_lang$core$Json_Decode$at,
-	{
-		ctor: '::',
-		_0: 'target',
-		_1: {
-			ctor: '::',
-			_0: 'checked',
-			_1: {ctor: '[]'}
-		}
-	},
-	_elm_lang$core$Json_Decode$bool);
-var _elm_lang$html$Html_Events$targetValue = A2(
-	_elm_lang$core$Json_Decode$at,
-	{
-		ctor: '::',
-		_0: 'target',
-		_1: {
-			ctor: '::',
-			_0: 'value',
-			_1: {ctor: '[]'}
-		}
-	},
-	_elm_lang$core$Json_Decode$string);
-var _elm_lang$html$Html_Events$defaultOptions = _elm_lang$virtual_dom$VirtualDom$defaultOptions;
-var _elm_lang$html$Html_Events$onWithOptions = _elm_lang$virtual_dom$VirtualDom$onWithOptions;
-var _elm_lang$html$Html_Events$on = _elm_lang$virtual_dom$VirtualDom$on;
-var _elm_lang$html$Html_Events$onFocus = function (msg) {
-	return A2(
-		_elm_lang$html$Html_Events$on,
-		'focus',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _elm_lang$html$Html_Events$onBlur = function (msg) {
-	return A2(
-		_elm_lang$html$Html_Events$on,
-		'blur',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _elm_lang$html$Html_Events$onSubmitOptions = _elm_lang$core$Native_Utils.update(
-	_elm_lang$html$Html_Events$defaultOptions,
-	{preventDefault: true});
-var _elm_lang$html$Html_Events$onSubmit = function (msg) {
-	return A3(
-		_elm_lang$html$Html_Events$onWithOptions,
-		'submit',
-		_elm_lang$html$Html_Events$onSubmitOptions,
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _elm_lang$html$Html_Events$onCheck = function (tagger) {
-	return A2(
-		_elm_lang$html$Html_Events$on,
-		'change',
-		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$html$Html_Events$targetChecked));
-};
-var _elm_lang$html$Html_Events$onInput = function (tagger) {
-	return A2(
-		_elm_lang$html$Html_Events$on,
-		'input',
-		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$html$Html_Events$targetValue));
-};
-var _elm_lang$html$Html_Events$onMouseOut = function (msg) {
-	return A2(
-		_elm_lang$html$Html_Events$on,
-		'mouseout',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _elm_lang$html$Html_Events$onMouseOver = function (msg) {
-	return A2(
-		_elm_lang$html$Html_Events$on,
-		'mouseover',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _elm_lang$html$Html_Events$onMouseLeave = function (msg) {
-	return A2(
-		_elm_lang$html$Html_Events$on,
-		'mouseleave',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _elm_lang$html$Html_Events$onMouseEnter = function (msg) {
-	return A2(
-		_elm_lang$html$Html_Events$on,
-		'mouseenter',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _elm_lang$html$Html_Events$onMouseUp = function (msg) {
-	return A2(
-		_elm_lang$html$Html_Events$on,
-		'mouseup',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _elm_lang$html$Html_Events$onMouseDown = function (msg) {
-	return A2(
-		_elm_lang$html$Html_Events$on,
-		'mousedown',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _elm_lang$html$Html_Events$onDoubleClick = function (msg) {
-	return A2(
-		_elm_lang$html$Html_Events$on,
-		'dblclick',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _elm_lang$html$Html_Events$onClick = function (msg) {
-	return A2(
-		_elm_lang$html$Html_Events$on,
-		'click',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _elm_lang$html$Html_Events$Options = F2(
+var _elm_lang$html$Model$SeedDragDrop = F2(
 	function (a, b) {
-		return {stopPropagation: a, preventDefault: b};
+		return {dragDrop: a, hoverPos: b};
 	});
 
 var _elm_lang$html$View$renderGarden = F2(
@@ -10979,154 +12378,141 @@ var _elm_lang$html$View$renderGarden = F2(
 				}();
 				return A2(
 					_elm_lang$html$Html$div,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$classList(
-							{
-								ctor: '::',
-								_0: {ctor: '_Tuple2', _0: 'plot', _1: true},
-								_1: {
-									ctor: '::',
-									_0: {
-										ctor: '_Tuple2',
-										_0: 'plot-active',
-										_1: (!_elm_lang$core$Native_Utils.eq(selectedSeed, _elm_lang$core$Maybe$Nothing)) && _elm_lang$core$Native_Utils.eq(plantedSeed, _elm_lang$core$Maybe$Nothing)
-									},
-									_1: {ctor: '[]'}
-								}
-							}),
-						_1: {
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						{
 							ctor: '::',
-							_0: _elm_lang$html$Html_Events$onClick(clickMsg),
-							_1: {ctor: '[]'}
-						}
-					},
+							_0: _elm_lang$html$Html_Attributes$classList(
+								{
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'plot', _1: true},
+									_1: {
+										ctor: '::',
+										_0: {
+											ctor: '_Tuple2',
+											_0: 'plot-active',
+											_1: (!_elm_lang$core$Native_Utils.eq(selectedSeed, _elm_lang$core$Maybe$Nothing)) && _elm_lang$core$Native_Utils.eq(plantedSeed, _elm_lang$core$Maybe$Nothing)
+										},
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onClick(clickMsg),
+								_1: {ctor: '[]'}
+							}
+						},
+						A2(
+							_norpan$elm_html5_drag_drop$Html5_DragDrop$droppable,
+							_elm_lang$html$Messages$DragDropMsg,
+							{ctor: '_Tuple2', _0: row, _1: column})),
 					renderSeed(plantedSeed));
 			});
 		return flatten2DToList(
 			A2(_tortus$elm_array_2d$Array2D$indexedMap, plot, garden));
 	});
-var _elm_lang$html$View$listSeedOptions = F2(
-	function (selected, bank) {
-		var seedOption = function (seed) {
-			var _p3 = seed;
-			var name = _p3.name;
-			var description = _p3.description;
-			var image = _p3.image;
-			var cost = _p3.cost;
-			var disabled = _elm_lang$core$Native_Utils.cmp(cost, bank) > 0;
-			var msg = disabled ? _elm_lang$html$Messages$NoOp : _elm_lang$html$Messages$SelectSeed(seed);
-			return A2(
-				_elm_lang$html$Html$div,
+var _elm_lang$html$View$renderInventory = function (inventory) {
+	var stack = function (_p3) {
+		var _p4 = _p3;
+		var _p6 = _p4._0;
+		var _p5 = _p4._1;
+		return (_elm_lang$core$Native_Utils.cmp(_p5, 0) > 0) ? A2(
+			_elm_lang$html$Html$div,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$classList(
-						{
+					_0: _elm_lang$html$Html_Attributes$class('seed-option'),
+					_1: {ctor: '[]'}
+				},
+				A2(_norpan$elm_html5_drag_drop$Html5_DragDrop$draggable, _elm_lang$html$Messages$DragDropMsg, _p6)),
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$img,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('seed-image'),
+						_1: {
 							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 'seed-option', _1: true},
+							_0: _elm_lang$html$Html_Attributes$src(_p6.image),
 							_1: {
 								ctor: '::',
-								_0: {
-									ctor: '_Tuple2',
-									_0: 'seed-selected',
-									_1: _elm_lang$core$Native_Utils.eq(
-										_elm_lang$core$Maybe$Just(seed),
-										selected)
-								},
-								_1: {
-									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: 'seed-option-disabled', _1: disabled},
-									_1: {ctor: '[]'}
-								}
+								_0: _elm_lang$html$Html_Attributes$height(30),
+								_1: {ctor: '[]'}
 							}
-						}),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$html$Html_Events$onClick(msg),
-						_1: {ctor: '[]'}
-					}
-				},
-				{
+						}
+					},
+					{ctor: '[]'}),
+				_1: {
 					ctor: '::',
 					_0: A2(
-						_elm_lang$html$Html$img,
+						_elm_lang$html$Html$div,
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('seed-image'),
+							_0: _elm_lang$html$Html_Attributes$class('seed-details'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('seed-name'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text(
+										A2(_elm_lang$core$Basics_ops['++'], _p6.name, ' Seeds')),
+									_1: {ctor: '[]'}
+								}),
 							_1: {
 								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$src(image),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$height(30),
-									_1: {ctor: '[]'}
-								}
+								_0: A2(
+									_elm_lang$html$Html$div,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('seed-description'),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text(_p6.description),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
 							}
-						},
-						{ctor: '[]'}),
+						}),
 					_1: {
 						ctor: '::',
 						_0: A2(
 							_elm_lang$html$Html$div,
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$class('seed-details'),
+								_0: _elm_lang$html$Html_Attributes$class('seed-cost'),
 								_1: {ctor: '[]'}
 							},
 							{
 								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$div,
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$class('seed-name'),
-										_1: {ctor: '[]'}
-									},
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html$text(
-											A2(_elm_lang$core$Basics_ops['++'], name, ' Seeds')),
-										_1: {ctor: '[]'}
-									}),
-								_1: {
-									ctor: '::',
-									_0: A2(
-										_elm_lang$html$Html$div,
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$class('seed-description'),
-											_1: {ctor: '[]'}
-										},
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html$text(description),
-											_1: {ctor: '[]'}
-										}),
-									_1: {ctor: '[]'}
-								}
+								_0: _elm_lang$html$Html$text(
+									_elm_lang$core$Basics$toString(_p5)),
+								_1: {ctor: '[]'}
 							}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$div,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('seed-cost'),
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text(
-										_elm_lang$core$Basics$toString(cost)),
-									_1: {ctor: '[]'}
-								}),
-							_1: {ctor: '[]'}
-						}
+						_1: {ctor: '[]'}
 					}
-				});
-		};
-		return A2(_elm_lang$core$List$map, seedOption, _elm_lang$html$Seed$allSeeds);
-	});
+				}
+			}) : A2(
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
+			{ctor: '[]'});
+	};
+	return A2(
+		_elm_lang$core$List$map,
+		stack,
+		_eeue56$elm_all_dict$AllDict$toList(inventory));
+};
 var _elm_lang$html$View$content = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -11144,7 +12530,7 @@ var _elm_lang$html$View$content = function (model) {
 					_0: _elm_lang$html$Html_Attributes$class('seeds'),
 					_1: {ctor: '[]'}
 				},
-				A2(_elm_lang$html$View$listSeedOptions, model.selected, model.bank)),
+				_elm_lang$html$View$renderInventory(model.inventory)),
 			_1: {
 				ctor: '::',
 				_0: A2(
@@ -11276,36 +12662,77 @@ var _elm_lang$html$Update$update = F2(
 				};
 			case 'NoOp':
 				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+			case 'DragDropMsg':
+				var _p1 = A2(_norpan$elm_html5_drag_drop$Html5_DragDrop$update, _p0._0, model.seedDragDrop.dragDrop);
+				var newDragDrop = _p1._0;
+				var result = _p1._1;
+				var dragId = _norpan$elm_html5_drag_drop$Html5_DragDrop$getDragId(newDragDrop);
+				var dropId = _norpan$elm_html5_drag_drop$Html5_DragDrop$getDropId(newDragDrop);
+				var newSeedDragDrop = function () {
+					var _p2 = {ctor: '_Tuple2', _0: dragId, _1: dropId};
+					if ((_p2.ctor === '_Tuple2') && (_p2._0.ctor === 'Just')) {
+						return {dragDrop: newDragDrop, hoverPos: dropId};
+					} else {
+						return model.seedDragDrop;
+					}
+				}();
+				var _p3 = function () {
+					var _p4 = result;
+					if (_p4.ctor === 'Just') {
+						var _p5 = _p4._0._0;
+						return {
+							ctor: '_Tuple2',
+							_0: A4(
+								_tortus$elm_array_2d$Array2D$set,
+								_p4._0._1._0,
+								_p4._0._1._1,
+								_elm_lang$core$Maybe$Just(_p5),
+								model.garden),
+							_1: A2(_elm_lang$html$Inventory$removeSeedFromInventory, _p5, model.inventory)
+						};
+					} else {
+						return {ctor: '_Tuple2', _0: model.garden, _1: model.inventory};
+					}
+				}();
+				var newGarden = _p3._0;
+				var newInventory = _p3._1;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{seedDragDrop: newSeedDragDrop, garden: newGarden, inventory: newInventory}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 			case 'SelectSeed':
-				var _p1 = _p0._0;
+				var _p6 = _p0._0;
 				var newModel = _elm_lang$core$Native_Utils.eq(
 					model.selected,
-					_elm_lang$core$Maybe$Just(_p1)) ? _elm_lang$core$Native_Utils.update(
+					_elm_lang$core$Maybe$Just(_p6)) ? _elm_lang$core$Native_Utils.update(
 					model,
 					{selected: _elm_lang$core$Maybe$Nothing}) : _elm_lang$core$Native_Utils.update(
 					model,
 					{
-						selected: _elm_lang$core$Maybe$Just(_p1)
+						selected: _elm_lang$core$Maybe$Just(_p6)
 					});
 				return {ctor: '_Tuple2', _0: newModel, _1: _elm_lang$core$Platform_Cmd$none};
 			case 'PlantSeed':
-				var _p2 = _p0._2;
+				var _p7 = _p0._2;
 				var newGarden = A4(
 					_tortus$elm_array_2d$Array2D$set,
 					_p0._0,
 					_p0._1,
-					_elm_lang$core$Maybe$Just(_p2),
+					_elm_lang$core$Maybe$Just(_p7),
 					model.garden);
-				var newModel = (_elm_lang$core$Native_Utils.cmp(_p2.cost, model.bank) < 1) ? _elm_lang$core$Native_Utils.update(
+				var newModel = (_elm_lang$core$Native_Utils.cmp(_p7.cost, model.bank) < 1) ? _elm_lang$core$Native_Utils.update(
 					model,
-					{garden: newGarden, selected: _elm_lang$core$Maybe$Nothing, bank: model.bank - _p2.cost}) : model;
+					{garden: newGarden, selected: _elm_lang$core$Maybe$Nothing, bank: model.bank - _p7.cost}) : model;
 				return {ctor: '_Tuple2', _0: newModel, _1: _elm_lang$core$Platform_Cmd$none};
 			default:
-				var _p3 = _p0._2;
+				var _p8 = _p0._2;
 				var newGarden = A4(_tortus$elm_array_2d$Array2D$set, _p0._0, _p0._1, _elm_lang$core$Maybe$Nothing, model.garden);
-				var newModel = (_elm_lang$core$Native_Utils.cmp(_p3.maturity, 0) < 1) ? _elm_lang$core$Native_Utils.update(
+				var newModel = (_elm_lang$core$Native_Utils.cmp(_p8.maturity, 0) < 1) ? _elm_lang$core$Native_Utils.update(
 					model,
-					{bank: model.bank + (_p3.cost * 2), garden: newGarden}) : model;
+					{bank: model.bank + (_p8.cost * 2), garden: newGarden}) : model;
 				return {ctor: '_Tuple2', _0: newModel, _1: _elm_lang$core$Platform_Cmd$none};
 		}
 	});
