@@ -11542,11 +11542,11 @@ var _elm_lang$core$Time$subMap = F2(
 	});
 _elm_lang$core$Native_Platform.effectManagers['Time'] = {pkg: 'elm-lang/core', init: _elm_lang$core$Time$init, onEffects: _elm_lang$core$Time$onEffects, onSelfMsg: _elm_lang$core$Time$onSelfMsg, tag: 'sub', subMap: _elm_lang$core$Time$subMap};
 
-var _elm_lang$html$Seed$grape = {name: 'Grape', maturity: 120, color: 'purple', description: 'Reaches maturity in 120s', image: 'https://image.flaticon.com/icons/svg/135/135542.svg', cost: 30};
-var _elm_lang$html$Seed$lettuce = {name: 'Lettuce', maturity: 90, color: 'green', description: 'Reaches maturity in 90s', image: 'https://image.flaticon.com/icons/svg/135/135699.svg', cost: 25};
-var _elm_lang$html$Seed$banana = {name: 'Banana', maturity: 60, color: 'yellow', description: 'Reaches maturity in 60s', image: 'https://image.flaticon.com/icons/svg/135/135631.svg', cost: 15};
-var _elm_lang$html$Seed$orange = {name: 'Orange', maturity: 40, color: 'orange', description: 'Reaches maturity in 40s', image: 'https://image.flaticon.com/icons/svg/135/135620.svg', cost: 12};
-var _elm_lang$html$Seed$apple = {name: 'Apple', maturity: 30, color: 'red', description: 'Reaches maturity in 30s', image: 'https://image.flaticon.com/icons/svg/135/135728.svg', cost: 10};
+var _elm_lang$html$Seed$grape = {name: 'Grape', maturity: 120, color: '#6F58A8', description: 'Reaches maturity in 120s', image: 'https://image.flaticon.com/icons/svg/135/135542.svg', cost: 30};
+var _elm_lang$html$Seed$lettuce = {name: 'Lettuce', maturity: 90, color: '#659C35', description: 'Reaches maturity in 90s', image: 'https://image.flaticon.com/icons/svg/135/135699.svg', cost: 25};
+var _elm_lang$html$Seed$banana = {name: 'Banana', maturity: 60, color: '#E8C52E', description: 'Reaches maturity in 60s', image: 'https://image.flaticon.com/icons/svg/135/135631.svg', cost: 15};
+var _elm_lang$html$Seed$orange = {name: 'Orange', maturity: 40, color: '#ED8F20', description: 'Reaches maturity in 40s', image: 'https://image.flaticon.com/icons/svg/135/135620.svg', cost: 12};
+var _elm_lang$html$Seed$apple = {name: 'Apple', maturity: 30, color: '#D13834', description: 'Reaches maturity in 30s', image: 'https://image.flaticon.com/icons/svg/135/135728.svg', cost: 10};
 var _elm_lang$html$Seed$allSeeds = {
 	ctor: '::',
 	_0: _elm_lang$html$Seed$apple,
@@ -12049,13 +12049,6 @@ var _elm_lang$html$Messages$HarvestSeed = F3(
 	function (a, b, c) {
 		return {ctor: 'HarvestSeed', _0: a, _1: b, _2: c};
 	});
-var _elm_lang$html$Messages$PlantSeed = F3(
-	function (a, b, c) {
-		return {ctor: 'PlantSeed', _0: a, _1: b, _2: c};
-	});
-var _elm_lang$html$Messages$SelectSeed = function (a) {
-	return {ctor: 'SelectSeed', _0: a};
-};
 var _elm_lang$html$Messages$DragDropMsg = function (a) {
 	return {ctor: 'DragDropMsg', _0: a};
 };
@@ -12285,164 +12278,150 @@ var _elm_lang$html$Model$initialModel = function () {
 		time: 0,
 		garden: A3(_tortus$elm_array_2d$Array2D$repeat, size, size, _elm_lang$core$Maybe$Nothing),
 		inventory: _elm_lang$html$Inventory$init,
-		selected: _elm_lang$core$Maybe$Nothing,
 		bank: 100,
 		seedDragDrop: {dragDrop: _norpan$elm_html5_drag_drop$Html5_DragDrop$init, hoverPos: _elm_lang$core$Maybe$Nothing}
 	};
 }();
 var _elm_lang$html$Model$init = {ctor: '_Tuple2', _0: _elm_lang$html$Model$initialModel, _1: _elm_lang$core$Platform_Cmd$none};
-var _elm_lang$html$Model$Model = F6(
-	function (a, b, c, d, e, f) {
-		return {time: a, garden: b, inventory: c, selected: d, bank: e, seedDragDrop: f};
+var _elm_lang$html$Model$Model = F5(
+	function (a, b, c, d, e) {
+		return {time: a, garden: b, inventory: c, bank: d, seedDragDrop: e};
 	});
 var _elm_lang$html$Model$SeedDragDrop = F2(
 	function (a, b) {
 		return {dragDrop: a, hoverPos: b};
 	});
 
-var _elm_lang$html$View$renderGarden = F2(
-	function (garden, selectedSeed) {
-		var flatten2DToList = function (array2D) {
-			return _elm_lang$core$Array$toList(
-				A3(_elm_lang$core$Array$foldr, _elm_lang$core$Array$append, _elm_lang$core$Array$empty, array2D.data));
-		};
-		var renderSeed = function (seed) {
-			var _p0 = seed;
-			if (_p0.ctor === 'Just') {
-				var _p1 = _p0._0;
-				var background = (_elm_lang$core$Native_Utils.cmp(_p1.maturity, 0) < 1) ? A2(
-					_elm_lang$html$Html$div,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('plot-background'),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$style(
-								{
-									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: 'background-color', _1: _p1.color},
-									_1: {ctor: '[]'}
-								}),
-							_1: {ctor: '[]'}
-						}
-					},
-					{ctor: '[]'}) : A2(
-					_elm_lang$html$Html$div,
-					{ctor: '[]'},
-					{ctor: '[]'});
-				return {
+var _elm_lang$html$View$renderGarden = function (garden) {
+	var flatten2DToList = function (array2D) {
+		return _elm_lang$core$Array$toList(
+			A3(_elm_lang$core$Array$foldr, _elm_lang$core$Array$append, _elm_lang$core$Array$empty, array2D.data));
+	};
+	var renderSeed = function (seed) {
+		var _p0 = seed;
+		if (_p0.ctor === 'Just') {
+			var _p1 = _p0._0;
+			var background = (_elm_lang$core$Native_Utils.cmp(_p1.maturity, 0) < 1) ? A2(
+				_elm_lang$html$Html$div,
+				{
 					ctor: '::',
-					_0: background,
+					_0: _elm_lang$html$Html_Attributes$class('plot-background'),
 					_1: {
 						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$img,
+						_0: _elm_lang$html$Html_Attributes$style(
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$class('plot-seed'),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$src(_p1.image),
-									_1: {ctor: '[]'}
-								}
-							},
-							{ctor: '[]'}),
+								_0: {ctor: '_Tuple2', _0: 'background-color', _1: _p1.color},
+								_1: {ctor: '[]'}
+							}),
 						_1: {ctor: '[]'}
 					}
-				};
-			} else {
-				return {ctor: '[]'};
-			}
-		};
-		var plot = F3(
-			function (row, column, plantedSeed) {
-				var clickMsg = function () {
-					var _p2 = {ctor: '_Tuple2', _0: plantedSeed, _1: selectedSeed};
-					_v1_2:
-					do {
-						if (_p2._0.ctor === 'Nothing') {
-							if (_p2._1.ctor === 'Just') {
-								return A3(_elm_lang$html$Messages$PlantSeed, row, column, _p2._1._0);
-							} else {
-								break _v1_2;
-							}
-						} else {
-							if (_p2._1.ctor === 'Nothing') {
-								return A3(_elm_lang$html$Messages$HarvestSeed, row, column, _p2._0._0);
-							} else {
-								break _v1_2;
-							}
-						}
-					} while(false);
-					return _elm_lang$html$Messages$NoOp;
-				}();
-				return A2(
-					_elm_lang$html$Html$div,
-					A2(
-						_elm_lang$core$Basics_ops['++'],
+				},
+				{ctor: '[]'}) : A2(
+				_elm_lang$html$Html$div,
+				{ctor: '[]'},
+				{ctor: '[]'});
+			return {
+				ctor: '::',
+				_0: background,
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$img,
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$classList(
-								{
-									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: 'plot', _1: true},
-									_1: {
-										ctor: '::',
-										_0: {
-											ctor: '_Tuple2',
-											_0: 'plot-active',
-											_1: (!_elm_lang$core$Native_Utils.eq(selectedSeed, _elm_lang$core$Maybe$Nothing)) && _elm_lang$core$Native_Utils.eq(plantedSeed, _elm_lang$core$Maybe$Nothing)
-										},
-										_1: {ctor: '[]'}
-									}
-								}),
+							_0: _elm_lang$html$Html_Attributes$class('plot-seed'),
 							_1: {
 								ctor: '::',
-								_0: _elm_lang$html$Html_Events$onClick(clickMsg),
+								_0: _elm_lang$html$Html_Attributes$src(_p1.image),
 								_1: {ctor: '[]'}
 							}
 						},
-						A2(
-							_norpan$elm_html5_drag_drop$Html5_DragDrop$droppable,
-							_elm_lang$html$Messages$DragDropMsg,
-							{ctor: '_Tuple2', _0: row, _1: column})),
-					renderSeed(plantedSeed));
-			});
-		return flatten2DToList(
-			A2(_tortus$elm_array_2d$Array2D$indexedMap, plot, garden));
-	});
-var _elm_lang$html$View$renderInventory = function (inventory) {
-	var stack = function (_p3) {
-		var _p4 = _p3;
-		var _p6 = _p4._0;
-		var _p5 = _p4._1;
-		return (_elm_lang$core$Native_Utils.cmp(_p5, 0) > 0) ? A2(
-			_elm_lang$html$Html$div,
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('seed-option'),
+						{ctor: '[]'}),
 					_1: {ctor: '[]'}
-				},
-				A2(_norpan$elm_html5_drag_drop$Html5_DragDrop$draggable, _elm_lang$html$Messages$DragDropMsg, _p6)),
+				}
+			};
+		} else {
+			return {ctor: '[]'};
+		}
+	};
+	var plot = F3(
+		function (row, column, plantedSeed) {
+			var droppable = function () {
+				var _p2 = plantedSeed;
+				if (_p2.ctor === 'Just') {
+					return {ctor: '[]'};
+				} else {
+					return A2(
+						_norpan$elm_html5_drag_drop$Html5_DragDrop$droppable,
+						_elm_lang$html$Messages$DragDropMsg,
+						{ctor: '_Tuple2', _0: row, _1: column});
+				}
+			}();
+			var clickMsg = function () {
+				var _p3 = plantedSeed;
+				if (_p3.ctor === 'Just') {
+					return A3(_elm_lang$html$Messages$HarvestSeed, row, column, _p3._0);
+				} else {
+					return _elm_lang$html$Messages$NoOp;
+				}
+			}();
+			return A2(
+				_elm_lang$html$Html$div,
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('plot'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Events$onClick(clickMsg),
+							_1: {ctor: '[]'}
+						}
+					},
+					droppable),
+				renderSeed(plantedSeed));
+		});
+	return flatten2DToList(
+		A2(_tortus$elm_array_2d$Array2D$indexedMap, plot, garden));
+};
+var _elm_lang$html$View$renderInventory = function (inventory) {
+	var stack = function (_p4) {
+		var _p5 = _p4;
+		var _p7 = _p5._0;
+		var _p6 = _p5._1;
+		return (_elm_lang$core$Native_Utils.cmp(_p6, 0) > 0) ? A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('seed-option'),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$style(
+						{
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'border-color', _1: _p7.color},
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			},
 			{
 				ctor: '::',
 				_0: A2(
 					_elm_lang$html$Html$img,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('seed-image'),
-						_1: {
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						{
 							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$src(_p6.image),
+							_0: _elm_lang$html$Html_Attributes$class('seed-image'),
 							_1: {
 								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$height(30),
+								_0: _elm_lang$html$Html_Attributes$src(_p7.image),
 								_1: {ctor: '[]'}
 							}
-						}
-					},
+						},
+						A2(_norpan$elm_html5_drag_drop$Html5_DragDrop$draggable, _elm_lang$html$Messages$DragDropMsg, _p7)),
 					{ctor: '[]'}),
 				_1: {
 					ctor: '::',
@@ -12450,58 +12429,25 @@ var _elm_lang$html$View$renderInventory = function (inventory) {
 						_elm_lang$html$Html$div,
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('seed-details'),
-							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$div,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('seed-name'),
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text(
-										A2(_elm_lang$core$Basics_ops['++'], _p6.name, ' Seeds')),
-									_1: {ctor: '[]'}
-								}),
+							_0: _elm_lang$html$Html_Attributes$class('seed-count'),
 							_1: {
 								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$div,
+								_0: _elm_lang$html$Html_Attributes$style(
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$class('seed-description'),
-										_1: {ctor: '[]'}
-									},
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html$text(_p6.description),
+										_0: {ctor: '_Tuple2', _0: 'background-color', _1: _p7.color},
 										_1: {ctor: '[]'}
 									}),
 								_1: {ctor: '[]'}
 							}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(
+								_elm_lang$core$Basics$toString(_p6)),
+							_1: {ctor: '[]'}
 						}),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$div,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$class('seed-cost'),
-								_1: {ctor: '[]'}
-							},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text(
-									_elm_lang$core$Basics$toString(_p5)),
-								_1: {ctor: '[]'}
-							}),
-						_1: {ctor: '[]'}
-					}
+					_1: {ctor: '[]'}
 				}
 			}) : A2(
 			_elm_lang$html$Html$div,
@@ -12540,7 +12486,7 @@ var _elm_lang$html$View$content = function (model) {
 						_0: _elm_lang$html$Html_Attributes$class('garden'),
 						_1: {ctor: '[]'}
 					},
-					A2(_elm_lang$html$View$renderGarden, model.garden, model.selected)),
+					_elm_lang$html$View$renderGarden(model.garden)),
 				_1: {ctor: '[]'}
 			}
 		});
@@ -12601,23 +12547,7 @@ var _elm_lang$html$View$banner = F2(
 							_1: {ctor: '[]'}
 						}
 					}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$div,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('bank'),
-							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text(
-								_elm_lang$core$Basics$toString(bank)),
-							_1: {ctor: '[]'}
-						}),
-					_1: {ctor: '[]'}
-				}
+				_1: {ctor: '[]'}
 			});
 	});
 var _elm_lang$html$View$view = function (model) {
@@ -12703,36 +12633,12 @@ var _elm_lang$html$Update$update = F2(
 						{seedDragDrop: newSeedDragDrop, garden: newGarden, inventory: newInventory}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
-			case 'SelectSeed':
-				var _p6 = _p0._0;
-				var newModel = _elm_lang$core$Native_Utils.eq(
-					model.selected,
-					_elm_lang$core$Maybe$Just(_p6)) ? _elm_lang$core$Native_Utils.update(
-					model,
-					{selected: _elm_lang$core$Maybe$Nothing}) : _elm_lang$core$Native_Utils.update(
-					model,
-					{
-						selected: _elm_lang$core$Maybe$Just(_p6)
-					});
-				return {ctor: '_Tuple2', _0: newModel, _1: _elm_lang$core$Platform_Cmd$none};
-			case 'PlantSeed':
-				var _p7 = _p0._2;
-				var newGarden = A4(
-					_tortus$elm_array_2d$Array2D$set,
-					_p0._0,
-					_p0._1,
-					_elm_lang$core$Maybe$Just(_p7),
-					model.garden);
-				var newModel = (_elm_lang$core$Native_Utils.cmp(_p7.cost, model.bank) < 1) ? _elm_lang$core$Native_Utils.update(
-					model,
-					{garden: newGarden, selected: _elm_lang$core$Maybe$Nothing, bank: model.bank - _p7.cost}) : model;
-				return {ctor: '_Tuple2', _0: newModel, _1: _elm_lang$core$Platform_Cmd$none};
 			default:
-				var _p8 = _p0._2;
+				var _p6 = _p0._2;
 				var newGarden = A4(_tortus$elm_array_2d$Array2D$set, _p0._0, _p0._1, _elm_lang$core$Maybe$Nothing, model.garden);
-				var newModel = (_elm_lang$core$Native_Utils.cmp(_p8.maturity, 0) < 1) ? _elm_lang$core$Native_Utils.update(
+				var newModel = (_elm_lang$core$Native_Utils.cmp(_p6.maturity, 0) < 1) ? _elm_lang$core$Native_Utils.update(
 					model,
-					{bank: model.bank + (_p8.cost * 2), garden: newGarden}) : model;
+					{bank: model.bank + (_p6.cost * 2), garden: newGarden}) : model;
 				return {ctor: '_Tuple2', _0: newModel, _1: _elm_lang$core$Platform_Cmd$none};
 		}
 	});

@@ -11,7 +11,6 @@ type alias Model =
     { time : Int
     , garden : Array2D (Maybe Seed)
     , inventory : Inventory
-    , selected : Maybe Seed
     , bank : Int
     , seedDragDrop : SeedDragDrop
     }
@@ -32,7 +31,6 @@ initialModel =
         { time = 0
         , garden = Array2D.repeat size size Nothing
         , inventory = Inventory.init
-        , selected = Nothing
         , bank = 100
         , seedDragDrop = { dragDrop = Html5.DragDrop.init, hoverPos = Nothing }
         }

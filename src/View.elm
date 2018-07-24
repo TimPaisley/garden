@@ -28,7 +28,6 @@ banner time bank =
             [ h1 [ class "title" ] [ text "Garden" ]
             , h2 [ class "subtitle" ] [ text "Plant Stuff and Profit" ]
             ]
-        , div [ class "bank" ] [ text <| toString bank ]
         ]
 
 
@@ -60,7 +59,7 @@ content : Model -> Html Messages.Msg
 content model =
     div [ class "content" ]
         [ div [ class "seeds" ] (renderInventory model.inventory)
-        , div [ class "garden" ] (renderGarden model.garden model.selected)
+        , div [ class "garden" ] (renderGarden model.garden)
         ]
 
 
@@ -69,13 +68,9 @@ renderInventory inventory =
     let
         stack ( seed, count ) =
             if count > 0 then
-                div ([ class "seed-option" ] ++ Html5.DragDrop.draggable DragDropMsg seed)
-                    [ img [ class "seed-image", src seed.image, height 30 ] []
-                    , div [ class "seed-details" ]
-                        [ div [ class "seed-name" ] [ text <| seed.name ++ " Seeds" ]
-                        , div [ class "seed-description" ] [ text seed.description ]
-                        ]
-                    , div [ class "seed-cost" ] [ text <| toString count ]
+                div [ class "seed-option", style [ ( "border-color", seed.color ) ] ]
+                    [ img ([ class "seed-image", src seed.image ] ++ Html5.DragDrop.draggable DragDropMsg seed) []
+                    , div [ class "seed-count", style [ ( "background-color", seed.color ) ] ] [ text <| toString count ]
                     ]
             else
                 div [] []
@@ -84,31 +79,29 @@ renderInventory inventory =
             |> List.map stack
 
 
-renderGarden : Array2D (Maybe Seed) -> Maybe Seed -> List (Html Messages.Msg)
-renderGarden garden selectedSeed =
+renderGarden : Array2D (Maybe Seed) -> List (Html Messages.Msg)
+renderGarden garden =
     let
         plot row column plantedSeed =
             let
                 clickMsg =
-                    case ( plantedSeed, selectedSeed ) of
-                        ( Nothing, Just selected ) ->
-                            PlantSeed row column selected
-
-                        ( Just planted, Nothing ) ->
+                    case plantedSeed of
+                        Just planted ->
                             HarvestSeed row column planted
 
-                        ( _, _ ) ->
+                        _ ->
                             NoOp
+
+                droppable =
+                    case plantedSeed of
+                        Just _ ->
+                            []
+
+                        Nothing ->
+                            Html5.DragDrop.droppable DragDropMsg ( row, column )
             in
                 div
-                    ([ classList
-                        [ ( "plot", True )
-                        , ( "plot-active", selectedSeed /= Nothing && plantedSeed == Nothing )
-                        ]
-                     , onClick clickMsg
-                     ]
-                        ++ Html5.DragDrop.droppable DragDropMsg ( row, column )
-                    )
+                    ([ class "plot", onClick clickMsg ] ++ droppable)
                     (renderSeed plantedSeed)
 
         renderSeed seed =

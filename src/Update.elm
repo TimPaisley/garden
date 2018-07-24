@@ -52,29 +52,6 @@ update msg model =
             in
                 ( { model | seedDragDrop = newSeedDragDrop, garden = newGarden, inventory = newInventory }, Cmd.none )
 
-        SelectSeed s ->
-            let
-                newModel =
-                    if model.selected == Just s then
-                        { model | selected = Nothing }
-                    else
-                        { model | selected = Just s }
-            in
-                ( newModel, Cmd.none )
-
-        PlantSeed row column seed ->
-            let
-                newGarden =
-                    Array2D.set row column (Just seed) model.garden
-
-                newModel =
-                    if seed.cost <= model.bank then
-                        { model | garden = newGarden, selected = Nothing, bank = model.bank - seed.cost }
-                    else
-                        model
-            in
-                ( newModel, Cmd.none )
-
         HarvestSeed row column seed ->
             let
                 newGarden =
