@@ -11592,6 +11592,25 @@ var _elm_lang$html$Inventory$removeSeedFromInventory = F2(
 				A2(_eeue56$elm_all_dict$AllDict$get, seed, inventory)),
 			_elm_lang$core$Maybe$Just(true)) ? A3(_eeue56$elm_all_dict$AllDict$update, seed, update, inventory) : A2(_eeue56$elm_all_dict$AllDict$remove, seed, inventory);
 	});
+var _elm_lang$html$Inventory$addSeedToInventory = F2(
+	function (seed, inventory) {
+		var update = function (count) {
+			return A2(
+				_elm_lang$core$Maybe$map,
+				function (i) {
+					return i + 1;
+				},
+				count);
+		};
+		return _elm_lang$core$Native_Utils.eq(
+			A2(
+				_elm_lang$core$Maybe$map,
+				function (i) {
+					return _elm_lang$core$Native_Utils.cmp(i, 0) > 0;
+				},
+				A2(_eeue56$elm_all_dict$AllDict$get, seed, inventory)),
+			_elm_lang$core$Maybe$Just(true)) ? A3(_eeue56$elm_all_dict$AllDict$update, seed, update, inventory) : A3(_eeue56$elm_all_dict$AllDict$insert, seed, 1, inventory);
+	});
 var _elm_lang$html$Inventory$init = A2(
 	_eeue56$elm_all_dict$AllDict$fromList,
 	function (_) {
@@ -12045,6 +12064,9 @@ var _norpan$elm_html5_drag_drop$Html5_DragDrop$draggable = F2(
 		};
 	});
 
+var _elm_lang$html$Messages$PurchaseSeed = function (a) {
+	return {ctor: 'PurchaseSeed', _0: a};
+};
 var _elm_lang$html$Messages$HarvestSeed = F3(
 	function (a, b, c) {
 		return {ctor: 'HarvestSeed', _0: a, _1: b, _2: c};
@@ -12292,16 +12314,217 @@ var _elm_lang$html$Model$SeedDragDrop = F2(
 		return {dragDrop: a, hoverPos: b};
 	});
 
+var _elm_lang$html$View$renderResearch = function () {
+	var header = A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('section-header'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('title'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Research'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('subtitle'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('1 point'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
+		});
+	return {
+		ctor: '::',
+		_0: header,
+		_1: {ctor: '[]'}
+	};
+}();
+var _elm_lang$html$View$renderShop = function (bank) {
+	var seedOption = function (seed) {
+		var _p0 = seed;
+		var name = _p0.name;
+		var description = _p0.description;
+		var image = _p0.image;
+		var cost = _p0.cost;
+		var disabled = _elm_lang$core$Native_Utils.cmp(cost, bank) > 0;
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$classList(
+					{
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'shop-option', _1: true},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'shop-option-disabled', _1: disabled},
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Events$onClick(
+						_elm_lang$html$Messages$PurchaseSeed(seed)),
+					_1: {ctor: '[]'}
+				}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$img,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('shop-image'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$src(image),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$height(30),
+								_1: {ctor: '[]'}
+							}
+						}
+					},
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('shop-details'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('shop-name'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text(
+										A2(_elm_lang$core$Basics_ops['++'], name, ' Seeds')),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$div,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('shop-description'),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text(description),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('shop-cost'),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(
+									_elm_lang$core$Basics$toString(cost)),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}
+			});
+	};
+	var header = A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('section-header'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('title'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Shop'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('subtitle'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								'$',
+								_elm_lang$core$Basics$toString(bank))),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
+		});
+	return {
+		ctor: '::',
+		_0: header,
+		_1: A2(_elm_lang$core$List$map, seedOption, _elm_lang$html$Seed$allSeeds)
+	};
+};
 var _elm_lang$html$View$renderGarden = function (garden) {
 	var flatten2DToList = function (array2D) {
 		return _elm_lang$core$Array$toList(
 			A3(_elm_lang$core$Array$foldr, _elm_lang$core$Array$append, _elm_lang$core$Array$empty, array2D.data));
 	};
 	var renderSeed = function (seed) {
-		var _p0 = seed;
-		if (_p0.ctor === 'Just') {
-			var _p1 = _p0._0;
-			var background = (_elm_lang$core$Native_Utils.cmp(_p1.maturity, 0) < 1) ? A2(
+		var _p1 = seed;
+		if (_p1.ctor === 'Just') {
+			var _p2 = _p1._0;
+			var background = (_elm_lang$core$Native_Utils.cmp(_p2.maturity, 0) < 1) ? A2(
 				_elm_lang$html$Html$div,
 				{
 					ctor: '::',
@@ -12311,7 +12534,7 @@ var _elm_lang$html$View$renderGarden = function (garden) {
 						_0: _elm_lang$html$Html_Attributes$style(
 							{
 								ctor: '::',
-								_0: {ctor: '_Tuple2', _0: 'background-color', _1: _p1.color},
+								_0: {ctor: '_Tuple2', _0: 'background-color', _1: _p2.color},
 								_1: {ctor: '[]'}
 							}),
 						_1: {ctor: '[]'}
@@ -12333,7 +12556,7 @@ var _elm_lang$html$View$renderGarden = function (garden) {
 							_0: _elm_lang$html$Html_Attributes$class('plot-seed'),
 							_1: {
 								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$src(_p1.image),
+								_0: _elm_lang$html$Html_Attributes$src(_p2.image),
 								_1: {ctor: '[]'}
 							}
 						},
@@ -12348,8 +12571,8 @@ var _elm_lang$html$View$renderGarden = function (garden) {
 	var plot = F3(
 		function (row, column, plantedSeed) {
 			var droppable = function () {
-				var _p2 = plantedSeed;
-				if (_p2.ctor === 'Just') {
+				var _p3 = plantedSeed;
+				if (_p3.ctor === 'Just') {
 					return {ctor: '[]'};
 				} else {
 					return A2(
@@ -12359,9 +12582,9 @@ var _elm_lang$html$View$renderGarden = function (garden) {
 				}
 			}();
 			var clickMsg = function () {
-				var _p3 = plantedSeed;
-				if (_p3.ctor === 'Just') {
-					return A3(_elm_lang$html$Messages$HarvestSeed, row, column, _p3._0);
+				var _p4 = plantedSeed;
+				if (_p4.ctor === 'Just') {
+					return A3(_elm_lang$html$Messages$HarvestSeed, row, column, _p4._0);
 				} else {
 					return _elm_lang$html$Messages$NoOp;
 				}
@@ -12386,11 +12609,11 @@ var _elm_lang$html$View$renderGarden = function (garden) {
 		A2(_tortus$elm_array_2d$Array2D$indexedMap, plot, garden));
 };
 var _elm_lang$html$View$renderInventory = function (inventory) {
-	var stack = function (_p4) {
-		var _p5 = _p4;
-		var _p7 = _p5._0;
-		var _p6 = _p5._1;
-		return (_elm_lang$core$Native_Utils.cmp(_p6, 0) > 0) ? A2(
+	var stack = function (_p5) {
+		var _p6 = _p5;
+		var _p8 = _p6._0;
+		var _p7 = _p6._1;
+		return (_elm_lang$core$Native_Utils.cmp(_p7, 0) > 0) ? A2(
 			_elm_lang$html$Html$div,
 			{
 				ctor: '::',
@@ -12400,7 +12623,7 @@ var _elm_lang$html$View$renderInventory = function (inventory) {
 					_0: _elm_lang$html$Html_Attributes$style(
 						{
 							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 'border-color', _1: _p7.color},
+							_0: {ctor: '_Tuple2', _0: 'border-color', _1: _p8.color},
 							_1: {ctor: '[]'}
 						}),
 					_1: {ctor: '[]'}
@@ -12417,11 +12640,11 @@ var _elm_lang$html$View$renderInventory = function (inventory) {
 							_0: _elm_lang$html$Html_Attributes$class('seed-image'),
 							_1: {
 								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$src(_p7.image),
+								_0: _elm_lang$html$Html_Attributes$src(_p8.image),
 								_1: {ctor: '[]'}
 							}
 						},
-						A2(_norpan$elm_html5_drag_drop$Html5_DragDrop$draggable, _elm_lang$html$Messages$DragDropMsg, _p7)),
+						A2(_norpan$elm_html5_drag_drop$Html5_DragDrop$draggable, _elm_lang$html$Messages$DragDropMsg, _p8)),
 					{ctor: '[]'}),
 				_1: {
 					ctor: '::',
@@ -12435,7 +12658,7 @@ var _elm_lang$html$View$renderInventory = function (inventory) {
 								_0: _elm_lang$html$Html_Attributes$style(
 									{
 										ctor: '::',
-										_0: {ctor: '_Tuple2', _0: 'background-color', _1: _p7.color},
+										_0: {ctor: '_Tuple2', _0: 'background-color', _1: _p8.color},
 										_1: {ctor: '[]'}
 									}),
 								_1: {ctor: '[]'}
@@ -12444,7 +12667,7 @@ var _elm_lang$html$View$renderInventory = function (inventory) {
 						{
 							ctor: '::',
 							_0: _elm_lang$html$Html$text(
-								_elm_lang$core$Basics$toString(_p6)),
+								_elm_lang$core$Basics$toString(_p7)),
 							_1: {ctor: '[]'}
 						}),
 					_1: {ctor: '[]'}
@@ -12487,7 +12710,29 @@ var _elm_lang$html$View$content = function (model) {
 						_1: {ctor: '[]'}
 					},
 					_elm_lang$html$View$renderGarden(model.garden)),
-				_1: {ctor: '[]'}
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('shop'),
+							_1: {ctor: '[]'}
+						},
+						_elm_lang$html$View$renderShop(model.bank)),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('research'),
+								_1: {ctor: '[]'}
+							},
+							_elm_lang$html$View$renderResearch),
+						_1: {ctor: '[]'}
+					}
+				}
 			}
 		});
 };
@@ -12633,13 +12878,29 @@ var _elm_lang$html$Update$update = F2(
 						{seedDragDrop: newSeedDragDrop, garden: newGarden, inventory: newInventory}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
-			default:
+			case 'HarvestSeed':
 				var _p6 = _p0._2;
 				var newGarden = A4(_tortus$elm_array_2d$Array2D$set, _p0._0, _p0._1, _elm_lang$core$Maybe$Nothing, model.garden);
 				var newModel = (_elm_lang$core$Native_Utils.cmp(_p6.maturity, 0) < 1) ? _elm_lang$core$Native_Utils.update(
 					model,
 					{bank: model.bank + (_p6.cost * 2), garden: newGarden}) : model;
 				return {ctor: '_Tuple2', _0: newModel, _1: _elm_lang$core$Platform_Cmd$none};
+			default:
+				var _p8 = _p0._0;
+				var _p7 = (_elm_lang$core$Native_Utils.cmp(model.bank, _p8.cost) > -1) ? {
+					ctor: '_Tuple2',
+					_0: A2(_elm_lang$html$Inventory$addSeedToInventory, _p8, model.inventory),
+					_1: model.bank - _p8.cost
+				} : {ctor: '_Tuple2', _0: model.inventory, _1: model.bank};
+				var newInventory = _p7._0;
+				var newBank = _p7._1;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{inventory: newInventory, bank: newBank}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 		}
 	});
 

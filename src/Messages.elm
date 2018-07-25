@@ -10,3 +10,4 @@ type Msg
     | NoOp
     | DragDropMsg (Html5.DragDrop.Msg Seed ( Int, Int ))
     | HarvestSeed Int Int Seed
+    | PurchaseSeed Seed

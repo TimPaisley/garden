@@ -1,6 +1,6 @@
 module Update exposing (..)
 
-import Inventory exposing (removeSeedFromInventory)
+import Inventory exposing (addSeedToInventory, removeSeedFromInventory)
 import Model exposing (Model)
 import Messages exposing (Msg(..))
 import Array2D exposing (Array2D)
@@ -64,3 +64,13 @@ update msg model =
                         model
             in
                 ( newModel, Cmd.none )
+
+        PurchaseSeed seed ->
+            let
+                ( newInventory, newBank ) =
+                    if model.bank >= seed.cost then
+                        ( addSeedToInventory seed model.inventory, model.bank - seed.cost )
+                    else
+                        ( model.inventory, model.bank )
+            in
+                ( { model | inventory = newInventory, bank = newBank }, Cmd.none )

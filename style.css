@@ -39,10 +39,34 @@ html, body {
 .content {
   padding: 1.5rem;
   display: flex;
+  flex-wrap: wrap;
 }
 
+.section-header {
+  flex: 0;
+  padding: 20px;
+  border-bottom: 1px solid black;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-header .title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.section-header .subtitle {
+  font-size: 1.2rem;
+  font-weight: 400;
+}
+
+/* Inventory */
+
 .seeds {
-  flex: 1;
+  flex: 1 0 50%;
   margin-right: 20px;
 
   display: grid;
@@ -90,6 +114,8 @@ html, body {
   background-color: rgba(255, 255, 255, 0.8);
 }
 
+/* Garden */
+
 .garden {
   border: 1px dashed black;
   flex: 0 0 400px;
@@ -124,4 +150,69 @@ html, body {
   height: 30px;
   pointer-events: none;
   user-select: none;
+}
+
+/* Shop */
+
+.shop {
+  flex: 1 0 50%;
+  margin-right: 20px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  margin-top: 20px;
+}
+
+.shop-option {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.shop-option-disabled {
+  opacity: 0.2;
+  cursor: default;
+}
+
+.shop-option:not(.shop-option-disabled):hover {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.shop-image {
+  margin-right: 20px;
+}
+
+.shop-details {
+  flex: 1;
+}
+
+.shop-name {
+  font-size: 1.0rem;
+}
+
+.shop-description {
+  margin-top: 5px;
+  font-size: 0.8rem;
+  opacity: 0.5;
+}
+
+.shop-cost {
+  justify-self: flex-end;
+}
+
+/* Research */
+
+.research {
+  flex: 0 0 400px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  margin-top: 20px;
 }
