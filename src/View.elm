@@ -89,7 +89,7 @@ renderGarden garden =
                 clickMsg =
                     case plantedSeed of
                         Just planted ->
-                            HarvestSeed row column planted
+                            ClickSeed row column planted
 
                         _ ->
                             NoOp
@@ -103,18 +103,22 @@ renderGarden garden =
                             Html5.DragDrop.droppable DragDropMsg ( row, column )
             in
                 div
-                    ([ class "plot", onClick clickMsg ] ++ droppable)
+                    ([ classList [ ( "plot", True ), ( "plot-active", plantedSeed /= Nothing ) ], onClick clickMsg ] ++ droppable)
                     (renderSeed plantedSeed)
 
         renderSeed seed =
             case seed of
                 Just s ->
                     let
+                        seedGrowth =
+                            (toFloat s.age) / (toFloat s.maturity) * 100
+
                         background =
-                            if s.maturity <= 0 then
-                                div [ class "plot-background", style [ ( "background-color", s.color ) ] ] []
-                            else
-                                div [] []
+                            div
+                                [ class "plot-background"
+                                , style [ ( "background-color", s.color ), ( "height", (toString seedGrowth) ++ "%" ) ]
+                                ]
+                                []
                     in
                         [ background
                         , img [ class "plot-seed", src s.image ] []

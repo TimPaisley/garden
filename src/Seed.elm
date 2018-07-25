@@ -4,6 +4,7 @@ module Seed exposing (..)
 type alias Seed =
     { name : String
     , maturity : Int
+    , age : Int
     , color : String
     , description : String
     , image : String
@@ -24,7 +25,8 @@ allSeeds =
 apple : Seed
 apple =
     { name = "Apple"
-    , maturity = 30
+    , maturity = 10
+    , age = 0
     , color = "#D13834"
     , description = "Reaches maturity in 30s"
     , image = "https://image.flaticon.com/icons/svg/135/135728.svg"
@@ -35,7 +37,8 @@ apple =
 orange : Seed
 orange =
     { name = "Orange"
-    , maturity = 40
+    , maturity = 12
+    , age = 0
     , color = "#ED8F20"
     , description = "Reaches maturity in 40s"
     , image = "https://image.flaticon.com/icons/svg/135/135620.svg"
@@ -46,7 +49,8 @@ orange =
 banana : Seed
 banana =
     { name = "Banana"
-    , maturity = 60
+    , maturity = 15
+    , age = 0
     , color = "#E8C52E"
     , description = "Reaches maturity in 60s"
     , image = "https://image.flaticon.com/icons/svg/135/135631.svg"
@@ -57,7 +61,8 @@ banana =
 lettuce : Seed
 lettuce =
     { name = "Lettuce"
-    , maturity = 90
+    , maturity = 20
+    , age = 0
     , color = "#659C35"
     , description = "Reaches maturity in 90s"
     , image = "https://image.flaticon.com/icons/svg/135/135699.svg"
@@ -68,7 +73,8 @@ lettuce =
 grape : Seed
 grape =
     { name = "Grape"
-    , maturity = 120
+    , maturity = 30
+    , age = 0
     , color = "#6F58A8"
     , description = "Reaches maturity in 120s"
     , image = "https://image.flaticon.com/icons/svg/135/135542.svg"

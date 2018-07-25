@@ -11,14 +11,7 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Tick _ ->
-            let
-                newGarden =
-                    Array2D.map (Maybe.map updateMaturity) model.garden
-
-                updateMaturity s =
-                    { s | maturity = s.maturity - 5 }
-            in
-                ( { model | time = model.time + 1, garden = newGarden }, Cmd.none )
+            ( { model | time = model.time + 1 }, Cmd.none )
 
         NoOp ->
             ( model, Cmd.none )
@@ -52,16 +45,19 @@ update msg model =
             in
                 ( { model | seedDragDrop = newSeedDragDrop, garden = newGarden, inventory = newInventory }, Cmd.none )
 
-        HarvestSeed row column seed ->
+        ClickSeed row column seed ->
             let
-                newGarden =
+                harvestSeed =
                     Array2D.set row column Nothing model.garden
 
+                growSeed =
+                    Array2D.set row column (Just { seed | age = seed.age + 1 }) model.garden
+
                 newModel =
-                    if seed.maturity <= 0 then
-                        { model | bank = model.bank + (seed.cost * 2), garden = newGarden }
+                    if seed.age >= seed.maturity then
+                        { model | bank = model.bank + (seed.cost * 2), garden = harvestSeed }
                     else
-                        model
+                        { model | garden = growSeed }
             in
                 ( newModel, Cmd.none )
 

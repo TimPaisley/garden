@@ -11542,11 +11542,11 @@ var _elm_lang$core$Time$subMap = F2(
 	});
 _elm_lang$core$Native_Platform.effectManagers['Time'] = {pkg: 'elm-lang/core', init: _elm_lang$core$Time$init, onEffects: _elm_lang$core$Time$onEffects, onSelfMsg: _elm_lang$core$Time$onSelfMsg, tag: 'sub', subMap: _elm_lang$core$Time$subMap};
 
-var _elm_lang$html$Seed$grape = {name: 'Grape', maturity: 120, color: '#6F58A8', description: 'Reaches maturity in 120s', image: 'https://image.flaticon.com/icons/svg/135/135542.svg', cost: 30};
-var _elm_lang$html$Seed$lettuce = {name: 'Lettuce', maturity: 90, color: '#659C35', description: 'Reaches maturity in 90s', image: 'https://image.flaticon.com/icons/svg/135/135699.svg', cost: 25};
-var _elm_lang$html$Seed$banana = {name: 'Banana', maturity: 60, color: '#E8C52E', description: 'Reaches maturity in 60s', image: 'https://image.flaticon.com/icons/svg/135/135631.svg', cost: 15};
-var _elm_lang$html$Seed$orange = {name: 'Orange', maturity: 40, color: '#ED8F20', description: 'Reaches maturity in 40s', image: 'https://image.flaticon.com/icons/svg/135/135620.svg', cost: 12};
-var _elm_lang$html$Seed$apple = {name: 'Apple', maturity: 30, color: '#D13834', description: 'Reaches maturity in 30s', image: 'https://image.flaticon.com/icons/svg/135/135728.svg', cost: 10};
+var _elm_lang$html$Seed$grape = {name: 'Grape', maturity: 30, age: 0, color: '#6F58A8', description: 'Reaches maturity in 120s', image: 'https://image.flaticon.com/icons/svg/135/135542.svg', cost: 30};
+var _elm_lang$html$Seed$lettuce = {name: 'Lettuce', maturity: 20, age: 0, color: '#659C35', description: 'Reaches maturity in 90s', image: 'https://image.flaticon.com/icons/svg/135/135699.svg', cost: 25};
+var _elm_lang$html$Seed$banana = {name: 'Banana', maturity: 15, age: 0, color: '#E8C52E', description: 'Reaches maturity in 60s', image: 'https://image.flaticon.com/icons/svg/135/135631.svg', cost: 15};
+var _elm_lang$html$Seed$orange = {name: 'Orange', maturity: 12, age: 0, color: '#ED8F20', description: 'Reaches maturity in 40s', image: 'https://image.flaticon.com/icons/svg/135/135620.svg', cost: 12};
+var _elm_lang$html$Seed$apple = {name: 'Apple', maturity: 10, age: 0, color: '#D13834', description: 'Reaches maturity in 30s', image: 'https://image.flaticon.com/icons/svg/135/135728.svg', cost: 10};
 var _elm_lang$html$Seed$allSeeds = {
 	ctor: '::',
 	_0: _elm_lang$html$Seed$apple,
@@ -11568,9 +11568,9 @@ var _elm_lang$html$Seed$allSeeds = {
 		}
 	}
 };
-var _elm_lang$html$Seed$Seed = F6(
-	function (a, b, c, d, e, f) {
-		return {name: a, maturity: b, color: c, description: d, image: e, cost: f};
+var _elm_lang$html$Seed$Seed = F7(
+	function (a, b, c, d, e, f, g) {
+		return {name: a, maturity: b, age: c, color: d, description: e, image: f, cost: g};
 	});
 
 var _elm_lang$html$Inventory$removeSeedFromInventory = F2(
@@ -12067,9 +12067,9 @@ var _norpan$elm_html5_drag_drop$Html5_DragDrop$draggable = F2(
 var _elm_lang$html$Messages$PurchaseSeed = function (a) {
 	return {ctor: 'PurchaseSeed', _0: a};
 };
-var _elm_lang$html$Messages$HarvestSeed = F3(
+var _elm_lang$html$Messages$ClickSeed = F3(
 	function (a, b, c) {
-		return {ctor: 'HarvestSeed', _0: a, _1: b, _2: c};
+		return {ctor: 'ClickSeed', _0: a, _1: b, _2: c};
 	});
 var _elm_lang$html$Messages$DragDropMsg = function (a) {
 	return {ctor: 'DragDropMsg', _0: a};
@@ -12524,7 +12524,8 @@ var _elm_lang$html$View$renderGarden = function (garden) {
 		var _p1 = seed;
 		if (_p1.ctor === 'Just') {
 			var _p2 = _p1._0;
-			var background = (_elm_lang$core$Native_Utils.cmp(_p2.maturity, 0) < 1) ? A2(
+			var seedGrowth = (_elm_lang$core$Basics$toFloat(_p2.age) / _elm_lang$core$Basics$toFloat(_p2.maturity)) * 100;
+			var background = A2(
 				_elm_lang$html$Html$div,
 				{
 					ctor: '::',
@@ -12535,14 +12536,22 @@ var _elm_lang$html$View$renderGarden = function (garden) {
 							{
 								ctor: '::',
 								_0: {ctor: '_Tuple2', _0: 'background-color', _1: _p2.color},
-								_1: {ctor: '[]'}
+								_1: {
+									ctor: '::',
+									_0: {
+										ctor: '_Tuple2',
+										_0: 'height',
+										_1: A2(
+											_elm_lang$core$Basics_ops['++'],
+											_elm_lang$core$Basics$toString(seedGrowth),
+											'%')
+									},
+									_1: {ctor: '[]'}
+								}
 							}),
 						_1: {ctor: '[]'}
 					}
 				},
-				{ctor: '[]'}) : A2(
-				_elm_lang$html$Html$div,
-				{ctor: '[]'},
 				{ctor: '[]'});
 			return {
 				ctor: '::',
@@ -12584,7 +12593,7 @@ var _elm_lang$html$View$renderGarden = function (garden) {
 			var clickMsg = function () {
 				var _p4 = plantedSeed;
 				if (_p4.ctor === 'Just') {
-					return A3(_elm_lang$html$Messages$HarvestSeed, row, column, _p4._0);
+					return A3(_elm_lang$html$Messages$ClickSeed, row, column, _p4._0);
 				} else {
 					return _elm_lang$html$Messages$NoOp;
 				}
@@ -12595,7 +12604,20 @@ var _elm_lang$html$View$renderGarden = function (garden) {
 					_elm_lang$core$Basics_ops['++'],
 					{
 						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('plot'),
+						_0: _elm_lang$html$Html_Attributes$classList(
+							{
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'plot', _1: true},
+								_1: {
+									ctor: '::',
+									_0: {
+										ctor: '_Tuple2',
+										_0: 'plot-active',
+										_1: !_elm_lang$core$Native_Utils.eq(plantedSeed, _elm_lang$core$Maybe$Nothing)
+									},
+									_1: {ctor: '[]'}
+								}
+							}),
 						_1: {
 							ctor: '::',
 							_0: _elm_lang$html$Html_Events$onClick(clickMsg),
@@ -12819,20 +12841,11 @@ var _elm_lang$html$Update$update = F2(
 		var _p0 = msg;
 		switch (_p0.ctor) {
 			case 'Tick':
-				var updateMaturity = function (s) {
-					return _elm_lang$core$Native_Utils.update(
-						s,
-						{maturity: s.maturity - 5});
-				};
-				var newGarden = A2(
-					_tortus$elm_array_2d$Array2D$map,
-					_elm_lang$core$Maybe$map(updateMaturity),
-					model.garden);
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{time: model.time + 1, garden: newGarden}),
+						{time: model.time + 1}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'NoOp':
@@ -12878,22 +12891,35 @@ var _elm_lang$html$Update$update = F2(
 						{seedDragDrop: newSeedDragDrop, garden: newGarden, inventory: newInventory}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
-			case 'HarvestSeed':
-				var _p6 = _p0._2;
-				var newGarden = A4(_tortus$elm_array_2d$Array2D$set, _p0._0, _p0._1, _elm_lang$core$Maybe$Nothing, model.garden);
-				var newModel = (_elm_lang$core$Native_Utils.cmp(_p6.maturity, 0) < 1) ? _elm_lang$core$Native_Utils.update(
+			case 'ClickSeed':
+				var _p8 = _p0._2;
+				var _p7 = _p0._0;
+				var _p6 = _p0._1;
+				var growSeed = A4(
+					_tortus$elm_array_2d$Array2D$set,
+					_p7,
+					_p6,
+					_elm_lang$core$Maybe$Just(
+						_elm_lang$core$Native_Utils.update(
+							_p8,
+							{age: _p8.age + 1})),
+					model.garden);
+				var harvestSeed = A4(_tortus$elm_array_2d$Array2D$set, _p7, _p6, _elm_lang$core$Maybe$Nothing, model.garden);
+				var newModel = (_elm_lang$core$Native_Utils.cmp(_p8.age, _p8.maturity) > -1) ? _elm_lang$core$Native_Utils.update(
 					model,
-					{bank: model.bank + (_p6.cost * 2), garden: newGarden}) : model;
+					{bank: model.bank + (_p8.cost * 2), garden: harvestSeed}) : _elm_lang$core$Native_Utils.update(
+					model,
+					{garden: growSeed});
 				return {ctor: '_Tuple2', _0: newModel, _1: _elm_lang$core$Platform_Cmd$none};
 			default:
-				var _p8 = _p0._0;
-				var _p7 = (_elm_lang$core$Native_Utils.cmp(model.bank, _p8.cost) > -1) ? {
+				var _p10 = _p0._0;
+				var _p9 = (_elm_lang$core$Native_Utils.cmp(model.bank, _p10.cost) > -1) ? {
 					ctor: '_Tuple2',
-					_0: A2(_elm_lang$html$Inventory$addSeedToInventory, _p8, model.inventory),
-					_1: model.bank - _p8.cost
+					_0: A2(_elm_lang$html$Inventory$addSeedToInventory, _p10, model.inventory),
+					_1: model.bank - _p10.cost
 				} : {ctor: '_Tuple2', _0: model.inventory, _1: model.bank};
-				var newInventory = _p7._0;
-				var newBank = _p7._1;
+				var newInventory = _p9._0;
+				var newBank = _p9._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(

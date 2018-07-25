@@ -9,5 +9,5 @@ type Msg
     = Tick Time
     | NoOp
     | DragDropMsg (Html5.DragDrop.Msg Seed ( Int, Int ))
-    | HarvestSeed Int Int Seed
+    | ClickSeed Int Int Seed
     | PurchaseSeed Seed
