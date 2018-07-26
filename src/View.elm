@@ -1,9 +1,9 @@
 module View exposing (..)
 
+import Item exposing (Item)
 import Inventory exposing (Inventory)
 import Messages exposing (Msg(..))
 import Model exposing (Model)
-import Seed exposing (Seed)
 import Array exposing (Array)
 import AllDict exposing (AllDict)
 import Array2D exposing (Array2D)
@@ -68,11 +68,19 @@ content model =
 renderInventory : Inventory -> List (Html Messages.Msg)
 renderInventory inventory =
     let
-        stack ( seed, count ) =
+        color item =
+            case item.options of
+                Item.Seed options ->
+                    options.color
+
+                _ ->
+                    "black"
+
+        stack ( item, count ) =
             if count > 0 then
-                div [ class "seed-option", style [ ( "border-color", seed.color ) ] ]
-                    [ img ([ class "seed-image", src seed.image ] ++ Html5.DragDrop.draggable DragDropMsg seed) []
-                    , div [ class "seed-count", style [ ( "background-color", seed.color ) ] ] [ text <| toString count ]
+                div [ class "seed-option", style [ ( "border-color", color item ) ] ]
+                    [ img ([ class "seed-image", src item.image ] ++ Html5.DragDrop.draggable DragDropMsg item) []
+                    , div [ class "seed-count", style [ ( "background-color", color item ) ] ] [ text <| toString count ]
                     ]
             else
                 div [] []
@@ -81,21 +89,21 @@ renderInventory inventory =
             |> List.map stack
 
 
-renderGarden : Array2D (Maybe Seed) -> List (Html Messages.Msg)
+renderGarden : Array2D (Maybe Item) -> List (Html Messages.Msg)
 renderGarden garden =
     let
-        plot row column plantedSeed =
+        plot row column planted =
             let
                 clickMsg =
-                    case plantedSeed of
-                        Just planted ->
-                            ClickSeed row column planted
+                    case planted of
+                        Just p ->
+                            ClickItem row column p
 
                         _ ->
                             NoOp
 
                 droppable =
-                    case plantedSeed of
+                    case planted of
                         Just _ ->
                             []
 
@@ -103,29 +111,30 @@ renderGarden garden =
                             Html5.DragDrop.droppable DragDropMsg ( row, column )
             in
                 div
-                    ([ classList [ ( "plot", True ), ( "plot-active", plantedSeed /= Nothing ) ], onClick clickMsg ] ++ droppable)
-                    (renderSeed plantedSeed)
+                    ([ classList [ ( "plot", True ), ( "plot-active", planted /= Nothing ) ], onClick clickMsg ] ++ droppable)
+                    (Maybe.withDefault [] <| Maybe.map renderItem planted)
 
-        renderSeed seed =
-            case seed of
-                Just s ->
+        renderItem : Item -> List (Html Messages.Msg)
+        renderItem item =
+            case item.options of
+                Item.Seed options ->
                     let
                         seedGrowth =
-                            (toFloat s.age) / (toFloat s.maturity) * 100
+                            (toFloat options.age) / (toFloat options.maturity) * 100
 
                         background =
                             div
                                 [ class "plot-background"
-                                , style [ ( "background-color", s.color ), ( "height", (toString seedGrowth) ++ "%" ) ]
+                                , style [ ( "background-color", options.color ), ( "height", (toString seedGrowth) ++ "%" ) ]
                                 ]
                                 []
                     in
                         [ background
-                        , img [ class "plot-seed", src s.image ] []
+                        , img [ class "plot-seed", src item.image ] []
                         ]
 
-                Nothing ->
-                    []
+                Item.Tool options ->
+                    [ img [ class "plot-seed", src item.image ] [] ]
 
         flatten2DToList : Array2D a -> List a
         flatten2DToList array2D =
@@ -143,17 +152,17 @@ renderShop bank =
                 , div [ class "subtitle" ] [ text <| "$" ++ (toString bank) ]
                 ]
 
-        seedOption seed =
+        itemOption item =
             let
                 { name, description, image, cost } =
-                    seed
+                    item
 
                 disabled =
                     cost > bank
             in
                 div
                     [ classList [ ( "shop-option", True ), ( "shop-option-disabled", disabled ) ]
-                    , onClick <| PurchaseSeed seed
+                    , onClick <| PurchaseItem item
                     ]
                     [ img [ class "shop-image", src image, height 30 ] []
                     , div [ class "shop-details" ]
@@ -163,7 +172,7 @@ renderShop bank =
                     , div [ class "shop-cost" ] [ text <| toString cost ]
                     ]
     in
-        header :: (List.map seedOption Seed.allSeeds)
+        header :: (List.map itemOption Item.allSeeds)
 
 
 renderResearch : List (Html Messages.Msg)

@@ -1,39 +1,39 @@
 module Inventory exposing (..)
 
-import Seed exposing (Seed)
+import Item exposing (Item)
 import AllDict exposing (AllDict)
 
 
 type alias Inventory =
-    AllDict Seed Int String
+    AllDict Item Int String
 
 
 init : Inventory
 init =
-    AllDict.fromList .name [ ( Seed.apple, 10 ), ( Seed.orange, 5 ) ]
+    AllDict.fromList .name [ ( Item.apple, 10 ), ( Item.orange, 5 ) ]
 
 
-addSeedToInventory : Seed -> Inventory -> Inventory
-addSeedToInventory seed inventory =
+addItemToInventory : Item -> Inventory -> Inventory
+addItemToInventory item inventory =
     let
         update : Maybe Int -> Maybe Int
         update count =
             Maybe.map (\i -> i + 1) count
     in
-        if Maybe.map (\i -> i > 0) (AllDict.get seed inventory) == Just True then
-            AllDict.update seed update inventory
+        if Maybe.map (\i -> i > 0) (AllDict.get item inventory) == Just True then
+            AllDict.update item update inventory
         else
-            AllDict.insert seed 1 inventory
+            AllDict.insert item 1 inventory
 
 
-removeSeedFromInventory : Seed -> Inventory -> Inventory
-removeSeedFromInventory seed inventory =
+removeItemFromInventory : Item -> Inventory -> Inventory
+removeItemFromInventory item inventory =
     let
         update : Maybe Int -> Maybe Int
         update count =
             Maybe.map (\i -> i - 1) count
     in
-        if Maybe.map (\i -> i > 0) (AllDict.get seed inventory) == Just True then
-            AllDict.update seed update inventory
+        if Maybe.map (\i -> i > 0) (AllDict.get item inventory) == Just True then
+            AllDict.update item update inventory
         else
-            AllDict.remove seed inventory
+            AllDict.remove item inventory

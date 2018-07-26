@@ -1,6 +1,7 @@
 module Update exposing (..)
 
-import Inventory exposing (addSeedToInventory, removeSeedFromInventory)
+import Inventory exposing (addItemToInventory, removeItemFromInventory)
+import Item exposing (Item)
 import Model exposing (Model)
 import Messages exposing (Msg(..))
 import Array2D exposing (Array2D)
@@ -37,35 +38,40 @@ update msg model =
 
                 ( newGarden, newInventory ) =
                     case result of
-                        Just ( seed, ( row, column ), _ ) ->
-                            ( Array2D.set row column (Just seed) model.garden, removeSeedFromInventory seed model.inventory )
+                        Just ( item, ( row, column ), _ ) ->
+                            ( Array2D.set row column (Just item) model.garden, removeItemFromInventory item model.inventory )
 
                         Nothing ->
                             ( model.garden, model.inventory )
             in
                 ( { model | seedDragDrop = newSeedDragDrop, garden = newGarden, inventory = newInventory }, Cmd.none )
 
-        ClickSeed row column seed ->
+        ClickItem row column item ->
             let
                 harvestSeed =
                     Array2D.set row column Nothing model.garden
 
-                growSeed =
-                    Array2D.set row column (Just { seed | age = seed.age + 1 }) model.garden
+                growSeed options =
+                    Array2D.set row column (Just { item | options = Item.Seed { options | age = options.age + 1 } }) model.garden
 
                 newModel =
-                    if seed.age >= seed.maturity then
-                        { model | bank = model.bank + (seed.cost * 2), garden = harvestSeed }
-                    else
-                        { model | garden = growSeed }
+                    case item.options of
+                        Item.Seed options ->
+                            if options.age >= options.maturity then
+                                { model | bank = model.bank + (item.cost * 2), garden = harvestSeed }
+                            else
+                                { model | garden = growSeed options }
+
+                        Item.Tool options ->
+                            model
             in
                 ( newModel, Cmd.none )
 
-        PurchaseSeed seed ->
+        PurchaseItem item ->
             let
                 ( newInventory, newBank ) =
-                    if model.bank >= seed.cost then
-                        ( addSeedToInventory seed model.inventory, model.bank - seed.cost )
+                    if model.bank >= item.cost then
+                        ( addItemToInventory item model.inventory, model.bank - item.cost )
                     else
                         ( model.inventory, model.bank )
             in

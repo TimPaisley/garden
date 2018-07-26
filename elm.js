@@ -11542,39 +11542,291 @@ var _elm_lang$core$Time$subMap = F2(
 	});
 _elm_lang$core$Native_Platform.effectManagers['Time'] = {pkg: 'elm-lang/core', init: _elm_lang$core$Time$init, onEffects: _elm_lang$core$Time$onEffects, onSelfMsg: _elm_lang$core$Time$onSelfMsg, tag: 'sub', subMap: _elm_lang$core$Time$subMap};
 
-var _elm_lang$html$Seed$grape = {name: 'Grape', maturity: 30, age: 0, color: '#6F58A8', description: 'Reaches maturity in 120s', image: 'https://image.flaticon.com/icons/svg/135/135542.svg', cost: 30};
-var _elm_lang$html$Seed$lettuce = {name: 'Lettuce', maturity: 20, age: 0, color: '#659C35', description: 'Reaches maturity in 90s', image: 'https://image.flaticon.com/icons/svg/135/135699.svg', cost: 25};
-var _elm_lang$html$Seed$banana = {name: 'Banana', maturity: 15, age: 0, color: '#E8C52E', description: 'Reaches maturity in 60s', image: 'https://image.flaticon.com/icons/svg/135/135631.svg', cost: 15};
-var _elm_lang$html$Seed$orange = {name: 'Orange', maturity: 12, age: 0, color: '#ED8F20', description: 'Reaches maturity in 40s', image: 'https://image.flaticon.com/icons/svg/135/135620.svg', cost: 12};
-var _elm_lang$html$Seed$apple = {name: 'Apple', maturity: 10, age: 0, color: '#D13834', description: 'Reaches maturity in 30s', image: 'https://image.flaticon.com/icons/svg/135/135728.svg', cost: 10};
-var _elm_lang$html$Seed$allSeeds = {
+var _tortus$elm_array_2d$Array2D_ArrayHelpers$normalize = F3(
+	function (length, filler, input) {
+		var inputLength = _elm_lang$core$Array$length(input);
+		return (_elm_lang$core$Native_Utils.cmp(inputLength, length) > 0) ? A3(_elm_lang$core$Array$slice, 0, length, input) : ((_elm_lang$core$Native_Utils.cmp(inputLength, length) < 0) ? A2(
+			_elm_lang$core$Array$append,
+			input,
+			A2(_elm_lang$core$Array$repeat, length - inputLength, filler)) : input);
+	});
+var _tortus$elm_array_2d$Array2D_ArrayHelpers$truncateRows = F2(
+	function (columns, array) {
+		return A2(
+			_elm_lang$core$Array$map,
+			function (row) {
+				return (_elm_lang$core$Native_Utils.cmp(
+					_elm_lang$core$Array$length(row),
+					columns) > 0) ? A3(_elm_lang$core$Array$slice, 0, columns, row) : row;
+			},
+			array);
+	});
+var _tortus$elm_array_2d$Array2D_ArrayHelpers$minRowLength = function (array) {
+	return _elm_lang$core$Array$isEmpty(array) ? 0 : A3(
+		_elm_lang$core$Array$foldl,
+		F2(
+			function (row, min) {
+				var rowLen = _elm_lang$core$Array$length(row);
+				return _elm_lang$core$Native_Utils.eq(min, -1) ? rowLen : ((_elm_lang$core$Native_Utils.cmp(rowLen, min) < 0) ? rowLen : min);
+			}),
+		-1,
+		array);
+};
+var _tortus$elm_array_2d$Array2D_ArrayHelpers$getMinColumnsAndTruncateRows = function (array) {
+	var columns = _tortus$elm_array_2d$Array2D_ArrayHelpers$minRowLength(array);
+	var normalizedData = A2(_tortus$elm_array_2d$Array2D_ArrayHelpers$truncateRows, columns, array);
+	return {ctor: '_Tuple2', _0: columns, _1: normalizedData};
+};
+var _tortus$elm_array_2d$Array2D_ArrayHelpers$deleteArrayElt = F2(
+	function (index, array) {
+		var last = A3(
+			_elm_lang$core$Array$slice,
+			index + 1,
+			_elm_lang$core$Array$length(array),
+			array);
+		var first = A3(_elm_lang$core$Array$slice, 0, index, array);
+		var lastIndex = _elm_lang$core$Array$length(array) - 1;
+		return ((_elm_lang$core$Native_Utils.cmp(index, lastIndex) > 0) || (_elm_lang$core$Native_Utils.cmp(index, 0) < 0)) ? array : A2(_elm_lang$core$Array$append, first, last);
+	});
+
+var _tortus$elm_array_2d$Array2D$indexedMap = F2(
+	function (fn, array2d) {
+		var mappedData = A2(
+			_elm_lang$core$Array$indexedMap,
+			F2(
+				function (row, rowAry) {
+					return A2(
+						_elm_lang$core$Array$indexedMap,
+						F2(
+							function (col, value) {
+								return A3(fn, row, col, value);
+							}),
+						rowAry);
+				}),
+			array2d.data);
+		return _elm_lang$core$Native_Utils.update(
+			array2d,
+			{data: mappedData});
+	});
+var _tortus$elm_array_2d$Array2D$map = F2(
+	function (fn, array2d) {
+		return A2(
+			_tortus$elm_array_2d$Array2D$indexedMap,
+			F3(
+				function (_p1, _p0, val) {
+					return fn(val);
+				}),
+			array2d);
+	});
+var _tortus$elm_array_2d$Array2D$deleteColumn = F2(
+	function (index, array2d) {
+		var newData = A2(
+			_elm_lang$core$Array$map,
+			_tortus$elm_array_2d$Array2D_ArrayHelpers$deleteArrayElt(index),
+			array2d.data);
+		var newColumns = A2(
+			_elm_lang$core$Maybe$withDefault,
+			0,
+			A2(
+				_elm_lang$core$Maybe$map,
+				_elm_lang$core$Array$length,
+				A2(_elm_lang$core$Array$get, 0, newData)));
+		return _elm_lang$core$Native_Utils.update(
+			array2d,
+			{data: newData, columns: newColumns});
+	});
+var _tortus$elm_array_2d$Array2D$deleteRow = F2(
+	function (index, array2d) {
+		return _elm_lang$core$Native_Utils.update(
+			array2d,
+			{
+				data: A2(_tortus$elm_array_2d$Array2D_ArrayHelpers$deleteArrayElt, index, array2d.data)
+			});
+	});
+var _tortus$elm_array_2d$Array2D$appendColumn = F3(
+	function (column, filler, array2d) {
+		var newData = A2(
+			_elm_lang$core$Array$indexedMap,
+			F2(
+				function (index, row) {
+					var newCell = A2(
+						_elm_lang$core$Maybe$withDefault,
+						filler,
+						A2(_elm_lang$core$Array$get, index, column));
+					return A2(_elm_lang$core$Array$push, newCell, row);
+				}),
+			array2d.data);
+		return _elm_lang$core$Native_Utils.update(
+			array2d,
+			{data: newData, columns: array2d.columns + 1});
+	});
+var _tortus$elm_array_2d$Array2D$appendRow = F3(
+	function (row, filler, array2d) {
+		var normalizedRow = A3(_tortus$elm_array_2d$Array2D_ArrayHelpers$normalize, array2d.columns, filler, row);
+		var newRows = A2(_elm_lang$core$Array$push, normalizedRow, array2d.data);
+		return _elm_lang$core$Native_Utils.update(
+			array2d,
+			{data: newRows});
+	});
+var _tortus$elm_array_2d$Array2D$getColumn = F2(
+	function (column, array2d) {
+		return A2(
+			_elm_lang$core$Array$map,
+			function (rowArray) {
+				return A2(_elm_lang$core$Array$get, column, rowArray);
+			},
+			array2d.data);
+	});
+var _tortus$elm_array_2d$Array2D$getRow = F2(
+	function (row, array2d) {
+		return A2(_elm_lang$core$Array$get, row, array2d.data);
+	});
+var _tortus$elm_array_2d$Array2D$get = F3(
+	function (row, col, array2d) {
+		return A2(
+			_elm_lang$core$Maybe$andThen,
+			_elm_lang$core$Array$get(col),
+			A2(_tortus$elm_array_2d$Array2D$getRow, row, array2d));
+	});
+var _tortus$elm_array_2d$Array2D$set = F4(
+	function (row, col, newValue, array2d) {
+		return A2(
+			_elm_lang$core$Maybe$withDefault,
+			array2d,
+			A2(
+				_elm_lang$core$Maybe$map,
+				function (rowAry) {
+					return _elm_lang$core$Native_Utils.update(
+						array2d,
+						{
+							data: A3(
+								_elm_lang$core$Array$set,
+								row,
+								A3(_elm_lang$core$Array$set, col, newValue, rowAry),
+								array2d.data)
+						});
+				},
+				A2(_tortus$elm_array_2d$Array2D$getRow, row, array2d)));
+	});
+var _tortus$elm_array_2d$Array2D$isEmpty = function (array2d) {
+	return _elm_lang$core$Array$isEmpty(array2d.data);
+};
+var _tortus$elm_array_2d$Array2D$columns = function (array2d) {
+	return array2d.columns;
+};
+var _tortus$elm_array_2d$Array2D$rows = function (array2d) {
+	return _elm_lang$core$Array$length(array2d.data);
+};
+var _tortus$elm_array_2d$Array2D$repeat = F3(
+	function (numRows, numColumns, e) {
+		var row = A2(_elm_lang$core$Array$repeat, numColumns, e);
+		return {
+			data: A2(_elm_lang$core$Array$repeat, numRows, row),
+			columns: numColumns
+		};
+	});
+var _tortus$elm_array_2d$Array2D$initialize = F3(
+	function (numRows, numColumns, f) {
+		var rows = A2(
+			_elm_lang$core$Array$initialize,
+			numRows,
+			function (row) {
+				return A2(
+					_elm_lang$core$Array$initialize,
+					numColumns,
+					function (col) {
+						return A2(f, row, col);
+					});
+			});
+		return {data: rows, columns: numColumns};
+	});
+var _tortus$elm_array_2d$Array2D$fromArray = function (array) {
+	var _p2 = _tortus$elm_array_2d$Array2D_ArrayHelpers$getMinColumnsAndTruncateRows(array);
+	var columns = _p2._0;
+	var normalizedData = _p2._1;
+	return {data: normalizedData, columns: columns};
+};
+var _tortus$elm_array_2d$Array2D$fromList = function (list) {
+	return _tortus$elm_array_2d$Array2D$fromArray(
+		_elm_lang$core$Array$fromList(
+			A2(_elm_lang$core$List$map, _elm_lang$core$Array$fromList, list)));
+};
+var _tortus$elm_array_2d$Array2D$empty = {data: _elm_lang$core$Array$empty, columns: 0};
+var _tortus$elm_array_2d$Array2D$Array2D = F2(
+	function (a, b) {
+		return {data: a, columns: b};
+	});
+
+var _elm_lang$html$Item$Item = F5(
+	function (a, b, c, d, e) {
+		return {name: a, description: b, image: c, cost: d, options: e};
+	});
+var _elm_lang$html$Item$SeedOptions = F3(
+	function (a, b, c) {
+		return {maturity: a, age: b, color: c};
+	});
+var _elm_lang$html$Item$ToolOptions = function (a) {
+	return {thing: a};
+};
+var _elm_lang$html$Item$Tool = function (a) {
+	return {ctor: 'Tool', _0: a};
+};
+var _elm_lang$html$Item$Seed = function (a) {
+	return {ctor: 'Seed', _0: a};
+};
+var _elm_lang$html$Item$apple = function () {
+	var options = _elm_lang$html$Item$Seed(
+		{maturity: 10, age: 0, color: '#D13834'});
+	return {name: 'Apple', description: 'Reaches maturity in 30s', image: 'https://image.flaticon.com/icons/svg/135/135728.svg', cost: 10, options: options};
+}();
+var _elm_lang$html$Item$orange = function () {
+	var options = _elm_lang$html$Item$Seed(
+		{maturity: 12, age: 0, color: '#ED8F20'});
+	return {name: 'Orange', description: 'Reaches maturity in 40s', image: 'https://image.flaticon.com/icons/svg/135/135620.svg', cost: 12, options: options};
+}();
+var _elm_lang$html$Item$banana = function () {
+	var options = _elm_lang$html$Item$Seed(
+		{maturity: 15, age: 0, color: '#E8C52E'});
+	return {name: 'Banana', description: 'Reaches maturity in 60s', image: 'https://image.flaticon.com/icons/svg/135/135631.svg', cost: 15, options: options};
+}();
+var _elm_lang$html$Item$lettuce = function () {
+	var options = _elm_lang$html$Item$Seed(
+		{maturity: 20, age: 0, color: '#659C35'});
+	return {name: 'Lettuce', description: 'Reaches maturity in 90s', image: 'https://image.flaticon.com/icons/svg/135/135699.svg', cost: 25, options: options};
+}();
+var _elm_lang$html$Item$grape = function () {
+	var options = _elm_lang$html$Item$Seed(
+		{maturity: 30, age: 0, color: '#6F58A8'});
+	return {name: 'Grape', description: 'Reaches maturity in 120s', image: 'https://image.flaticon.com/icons/svg/135/135542.svg', cost: 30, options: options};
+}();
+var _elm_lang$html$Item$allSeeds = {
 	ctor: '::',
-	_0: _elm_lang$html$Seed$apple,
+	_0: _elm_lang$html$Item$apple,
 	_1: {
 		ctor: '::',
-		_0: _elm_lang$html$Seed$orange,
+		_0: _elm_lang$html$Item$orange,
 		_1: {
 			ctor: '::',
-			_0: _elm_lang$html$Seed$banana,
+			_0: _elm_lang$html$Item$banana,
 			_1: {
 				ctor: '::',
-				_0: _elm_lang$html$Seed$lettuce,
+				_0: _elm_lang$html$Item$lettuce,
 				_1: {
 					ctor: '::',
-					_0: _elm_lang$html$Seed$grape,
+					_0: _elm_lang$html$Item$grape,
 					_1: {ctor: '[]'}
 				}
 			}
 		}
 	}
 };
-var _elm_lang$html$Seed$Seed = F7(
-	function (a, b, c, d, e, f, g) {
-		return {name: a, maturity: b, age: c, color: d, description: e, image: f, cost: g};
-	});
 
-var _elm_lang$html$Inventory$removeSeedFromInventory = F2(
-	function (seed, inventory) {
+var _elm_lang$html$Garden$init = function (size) {
+	return A3(_tortus$elm_array_2d$Array2D$repeat, size, size, _elm_lang$core$Maybe$Nothing);
+};
+
+var _elm_lang$html$Inventory$removeItemFromInventory = F2(
+	function (item, inventory) {
 		var update = function (count) {
 			return A2(
 				_elm_lang$core$Maybe$map,
@@ -11589,11 +11841,11 @@ var _elm_lang$html$Inventory$removeSeedFromInventory = F2(
 				function (i) {
 					return _elm_lang$core$Native_Utils.cmp(i, 0) > 0;
 				},
-				A2(_eeue56$elm_all_dict$AllDict$get, seed, inventory)),
-			_elm_lang$core$Maybe$Just(true)) ? A3(_eeue56$elm_all_dict$AllDict$update, seed, update, inventory) : A2(_eeue56$elm_all_dict$AllDict$remove, seed, inventory);
+				A2(_eeue56$elm_all_dict$AllDict$get, item, inventory)),
+			_elm_lang$core$Maybe$Just(true)) ? A3(_eeue56$elm_all_dict$AllDict$update, item, update, inventory) : A2(_eeue56$elm_all_dict$AllDict$remove, item, inventory);
 	});
-var _elm_lang$html$Inventory$addSeedToInventory = F2(
-	function (seed, inventory) {
+var _elm_lang$html$Inventory$addItemToInventory = F2(
+	function (item, inventory) {
 		var update = function (count) {
 			return A2(
 				_elm_lang$core$Maybe$map,
@@ -11608,8 +11860,8 @@ var _elm_lang$html$Inventory$addSeedToInventory = F2(
 				function (i) {
 					return _elm_lang$core$Native_Utils.cmp(i, 0) > 0;
 				},
-				A2(_eeue56$elm_all_dict$AllDict$get, seed, inventory)),
-			_elm_lang$core$Maybe$Just(true)) ? A3(_eeue56$elm_all_dict$AllDict$update, seed, update, inventory) : A3(_eeue56$elm_all_dict$AllDict$insert, seed, 1, inventory);
+				A2(_eeue56$elm_all_dict$AllDict$get, item, inventory)),
+			_elm_lang$core$Maybe$Just(true)) ? A3(_eeue56$elm_all_dict$AllDict$update, item, update, inventory) : A3(_eeue56$elm_all_dict$AllDict$insert, item, 1, inventory);
 	});
 var _elm_lang$html$Inventory$init = A2(
 	_eeue56$elm_all_dict$AllDict$fromList,
@@ -11618,10 +11870,10 @@ var _elm_lang$html$Inventory$init = A2(
 	},
 	{
 		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: _elm_lang$html$Seed$apple, _1: 10},
+		_0: {ctor: '_Tuple2', _0: _elm_lang$html$Item$apple, _1: 10},
 		_1: {
 			ctor: '::',
-			_0: {ctor: '_Tuple2', _0: _elm_lang$html$Seed$orange, _1: 5},
+			_0: {ctor: '_Tuple2', _0: _elm_lang$html$Item$orange, _1: 5},
 			_1: {ctor: '[]'}
 		}
 	});
@@ -12064,12 +12316,12 @@ var _norpan$elm_html5_drag_drop$Html5_DragDrop$draggable = F2(
 		};
 	});
 
-var _elm_lang$html$Messages$PurchaseSeed = function (a) {
-	return {ctor: 'PurchaseSeed', _0: a};
+var _elm_lang$html$Messages$PurchaseItem = function (a) {
+	return {ctor: 'PurchaseItem', _0: a};
 };
-var _elm_lang$html$Messages$ClickSeed = F3(
+var _elm_lang$html$Messages$ClickItem = F3(
 	function (a, b, c) {
-		return {ctor: 'ClickSeed', _0: a, _1: b, _2: c};
+		return {ctor: 'ClickItem', _0: a, _1: b, _2: c};
 	});
 var _elm_lang$html$Messages$DragDropMsg = function (a) {
 	return {ctor: 'DragDropMsg', _0: a};
@@ -12079,226 +12331,11 @@ var _elm_lang$html$Messages$Tick = function (a) {
 	return {ctor: 'Tick', _0: a};
 };
 
-var _tortus$elm_array_2d$Array2D_ArrayHelpers$normalize = F3(
-	function (length, filler, input) {
-		var inputLength = _elm_lang$core$Array$length(input);
-		return (_elm_lang$core$Native_Utils.cmp(inputLength, length) > 0) ? A3(_elm_lang$core$Array$slice, 0, length, input) : ((_elm_lang$core$Native_Utils.cmp(inputLength, length) < 0) ? A2(
-			_elm_lang$core$Array$append,
-			input,
-			A2(_elm_lang$core$Array$repeat, length - inputLength, filler)) : input);
-	});
-var _tortus$elm_array_2d$Array2D_ArrayHelpers$truncateRows = F2(
-	function (columns, array) {
-		return A2(
-			_elm_lang$core$Array$map,
-			function (row) {
-				return (_elm_lang$core$Native_Utils.cmp(
-					_elm_lang$core$Array$length(row),
-					columns) > 0) ? A3(_elm_lang$core$Array$slice, 0, columns, row) : row;
-			},
-			array);
-	});
-var _tortus$elm_array_2d$Array2D_ArrayHelpers$minRowLength = function (array) {
-	return _elm_lang$core$Array$isEmpty(array) ? 0 : A3(
-		_elm_lang$core$Array$foldl,
-		F2(
-			function (row, min) {
-				var rowLen = _elm_lang$core$Array$length(row);
-				return _elm_lang$core$Native_Utils.eq(min, -1) ? rowLen : ((_elm_lang$core$Native_Utils.cmp(rowLen, min) < 0) ? rowLen : min);
-			}),
-		-1,
-		array);
-};
-var _tortus$elm_array_2d$Array2D_ArrayHelpers$getMinColumnsAndTruncateRows = function (array) {
-	var columns = _tortus$elm_array_2d$Array2D_ArrayHelpers$minRowLength(array);
-	var normalizedData = A2(_tortus$elm_array_2d$Array2D_ArrayHelpers$truncateRows, columns, array);
-	return {ctor: '_Tuple2', _0: columns, _1: normalizedData};
-};
-var _tortus$elm_array_2d$Array2D_ArrayHelpers$deleteArrayElt = F2(
-	function (index, array) {
-		var last = A3(
-			_elm_lang$core$Array$slice,
-			index + 1,
-			_elm_lang$core$Array$length(array),
-			array);
-		var first = A3(_elm_lang$core$Array$slice, 0, index, array);
-		var lastIndex = _elm_lang$core$Array$length(array) - 1;
-		return ((_elm_lang$core$Native_Utils.cmp(index, lastIndex) > 0) || (_elm_lang$core$Native_Utils.cmp(index, 0) < 0)) ? array : A2(_elm_lang$core$Array$append, first, last);
-	});
-
-var _tortus$elm_array_2d$Array2D$indexedMap = F2(
-	function (fn, array2d) {
-		var mappedData = A2(
-			_elm_lang$core$Array$indexedMap,
-			F2(
-				function (row, rowAry) {
-					return A2(
-						_elm_lang$core$Array$indexedMap,
-						F2(
-							function (col, value) {
-								return A3(fn, row, col, value);
-							}),
-						rowAry);
-				}),
-			array2d.data);
-		return _elm_lang$core$Native_Utils.update(
-			array2d,
-			{data: mappedData});
-	});
-var _tortus$elm_array_2d$Array2D$map = F2(
-	function (fn, array2d) {
-		return A2(
-			_tortus$elm_array_2d$Array2D$indexedMap,
-			F3(
-				function (_p1, _p0, val) {
-					return fn(val);
-				}),
-			array2d);
-	});
-var _tortus$elm_array_2d$Array2D$deleteColumn = F2(
-	function (index, array2d) {
-		var newData = A2(
-			_elm_lang$core$Array$map,
-			_tortus$elm_array_2d$Array2D_ArrayHelpers$deleteArrayElt(index),
-			array2d.data);
-		var newColumns = A2(
-			_elm_lang$core$Maybe$withDefault,
-			0,
-			A2(
-				_elm_lang$core$Maybe$map,
-				_elm_lang$core$Array$length,
-				A2(_elm_lang$core$Array$get, 0, newData)));
-		return _elm_lang$core$Native_Utils.update(
-			array2d,
-			{data: newData, columns: newColumns});
-	});
-var _tortus$elm_array_2d$Array2D$deleteRow = F2(
-	function (index, array2d) {
-		return _elm_lang$core$Native_Utils.update(
-			array2d,
-			{
-				data: A2(_tortus$elm_array_2d$Array2D_ArrayHelpers$deleteArrayElt, index, array2d.data)
-			});
-	});
-var _tortus$elm_array_2d$Array2D$appendColumn = F3(
-	function (column, filler, array2d) {
-		var newData = A2(
-			_elm_lang$core$Array$indexedMap,
-			F2(
-				function (index, row) {
-					var newCell = A2(
-						_elm_lang$core$Maybe$withDefault,
-						filler,
-						A2(_elm_lang$core$Array$get, index, column));
-					return A2(_elm_lang$core$Array$push, newCell, row);
-				}),
-			array2d.data);
-		return _elm_lang$core$Native_Utils.update(
-			array2d,
-			{data: newData, columns: array2d.columns + 1});
-	});
-var _tortus$elm_array_2d$Array2D$appendRow = F3(
-	function (row, filler, array2d) {
-		var normalizedRow = A3(_tortus$elm_array_2d$Array2D_ArrayHelpers$normalize, array2d.columns, filler, row);
-		var newRows = A2(_elm_lang$core$Array$push, normalizedRow, array2d.data);
-		return _elm_lang$core$Native_Utils.update(
-			array2d,
-			{data: newRows});
-	});
-var _tortus$elm_array_2d$Array2D$getColumn = F2(
-	function (column, array2d) {
-		return A2(
-			_elm_lang$core$Array$map,
-			function (rowArray) {
-				return A2(_elm_lang$core$Array$get, column, rowArray);
-			},
-			array2d.data);
-	});
-var _tortus$elm_array_2d$Array2D$getRow = F2(
-	function (row, array2d) {
-		return A2(_elm_lang$core$Array$get, row, array2d.data);
-	});
-var _tortus$elm_array_2d$Array2D$get = F3(
-	function (row, col, array2d) {
-		return A2(
-			_elm_lang$core$Maybe$andThen,
-			_elm_lang$core$Array$get(col),
-			A2(_tortus$elm_array_2d$Array2D$getRow, row, array2d));
-	});
-var _tortus$elm_array_2d$Array2D$set = F4(
-	function (row, col, newValue, array2d) {
-		return A2(
-			_elm_lang$core$Maybe$withDefault,
-			array2d,
-			A2(
-				_elm_lang$core$Maybe$map,
-				function (rowAry) {
-					return _elm_lang$core$Native_Utils.update(
-						array2d,
-						{
-							data: A3(
-								_elm_lang$core$Array$set,
-								row,
-								A3(_elm_lang$core$Array$set, col, newValue, rowAry),
-								array2d.data)
-						});
-				},
-				A2(_tortus$elm_array_2d$Array2D$getRow, row, array2d)));
-	});
-var _tortus$elm_array_2d$Array2D$isEmpty = function (array2d) {
-	return _elm_lang$core$Array$isEmpty(array2d.data);
-};
-var _tortus$elm_array_2d$Array2D$columns = function (array2d) {
-	return array2d.columns;
-};
-var _tortus$elm_array_2d$Array2D$rows = function (array2d) {
-	return _elm_lang$core$Array$length(array2d.data);
-};
-var _tortus$elm_array_2d$Array2D$repeat = F3(
-	function (numRows, numColumns, e) {
-		var row = A2(_elm_lang$core$Array$repeat, numColumns, e);
-		return {
-			data: A2(_elm_lang$core$Array$repeat, numRows, row),
-			columns: numColumns
-		};
-	});
-var _tortus$elm_array_2d$Array2D$initialize = F3(
-	function (numRows, numColumns, f) {
-		var rows = A2(
-			_elm_lang$core$Array$initialize,
-			numRows,
-			function (row) {
-				return A2(
-					_elm_lang$core$Array$initialize,
-					numColumns,
-					function (col) {
-						return A2(f, row, col);
-					});
-			});
-		return {data: rows, columns: numColumns};
-	});
-var _tortus$elm_array_2d$Array2D$fromArray = function (array) {
-	var _p2 = _tortus$elm_array_2d$Array2D_ArrayHelpers$getMinColumnsAndTruncateRows(array);
-	var columns = _p2._0;
-	var normalizedData = _p2._1;
-	return {data: normalizedData, columns: columns};
-};
-var _tortus$elm_array_2d$Array2D$fromList = function (list) {
-	return _tortus$elm_array_2d$Array2D$fromArray(
-		_elm_lang$core$Array$fromList(
-			A2(_elm_lang$core$List$map, _elm_lang$core$Array$fromList, list)));
-};
-var _tortus$elm_array_2d$Array2D$empty = {data: _elm_lang$core$Array$empty, columns: 0};
-var _tortus$elm_array_2d$Array2D$Array2D = F2(
-	function (a, b) {
-		return {data: a, columns: b};
-	});
-
 var _elm_lang$html$Model$initialModel = function () {
 	var size = 9;
 	return {
 		time: 0,
-		garden: A3(_tortus$elm_array_2d$Array2D$repeat, size, size, _elm_lang$core$Maybe$Nothing),
+		garden: _elm_lang$html$Garden$init(size),
 		inventory: _elm_lang$html$Inventory$init,
 		bank: 100,
 		seedDragDrop: {dragDrop: _norpan$elm_html5_drag_drop$Html5_DragDrop$init, hoverPos: _elm_lang$core$Maybe$Nothing}
@@ -12360,8 +12397,8 @@ var _elm_lang$html$View$renderResearch = function () {
 	};
 }();
 var _elm_lang$html$View$renderShop = function (bank) {
-	var seedOption = function (seed) {
-		var _p0 = seed;
+	var itemOption = function (item) {
+		var _p0 = item;
 		var name = _p0.name;
 		var description = _p0.description;
 		var image = _p0.image;
@@ -12384,7 +12421,7 @@ var _elm_lang$html$View$renderShop = function (bank) {
 				_1: {
 					ctor: '::',
 					_0: _elm_lang$html$Html_Events$onClick(
-						_elm_lang$html$Messages$PurchaseSeed(seed)),
+						_elm_lang$html$Messages$PurchaseItem(item)),
 					_1: {ctor: '[]'}
 				}
 			},
@@ -12512,7 +12549,7 @@ var _elm_lang$html$View$renderShop = function (bank) {
 	return {
 		ctor: '::',
 		_0: header,
-		_1: A2(_elm_lang$core$List$map, seedOption, _elm_lang$html$Seed$allSeeds)
+		_1: A2(_elm_lang$core$List$map, itemOption, _elm_lang$html$Item$allSeeds)
 	};
 };
 var _elm_lang$html$View$renderGarden = function (garden) {
@@ -12520,9 +12557,9 @@ var _elm_lang$html$View$renderGarden = function (garden) {
 		return _elm_lang$core$Array$toList(
 			A3(_elm_lang$core$Array$foldr, _elm_lang$core$Array$append, _elm_lang$core$Array$empty, array2D.data));
 	};
-	var renderSeed = function (seed) {
-		var _p1 = seed;
-		if (_p1.ctor === 'Just') {
+	var renderItem = function (item) {
+		var _p1 = item.options;
+		if (_p1.ctor === 'Seed') {
 			var _p2 = _p1._0;
 			var seedGrowth = (_elm_lang$core$Basics$toFloat(_p2.age) / _elm_lang$core$Basics$toFloat(_p2.maturity)) * 100;
 			var background = A2(
@@ -12565,7 +12602,7 @@ var _elm_lang$html$View$renderGarden = function (garden) {
 							_0: _elm_lang$html$Html_Attributes$class('plot-seed'),
 							_1: {
 								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$src(_p2.image),
+								_0: _elm_lang$html$Html_Attributes$src(item.image),
 								_1: {ctor: '[]'}
 							}
 						},
@@ -12574,13 +12611,28 @@ var _elm_lang$html$View$renderGarden = function (garden) {
 				}
 			};
 		} else {
-			return {ctor: '[]'};
+			return {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$img,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('plot-seed'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$src(item.image),
+							_1: {ctor: '[]'}
+						}
+					},
+					{ctor: '[]'}),
+				_1: {ctor: '[]'}
+			};
 		}
 	};
 	var plot = F3(
-		function (row, column, plantedSeed) {
+		function (row, column, planted) {
 			var droppable = function () {
-				var _p3 = plantedSeed;
+				var _p3 = planted;
 				if (_p3.ctor === 'Just') {
 					return {ctor: '[]'};
 				} else {
@@ -12591,9 +12643,9 @@ var _elm_lang$html$View$renderGarden = function (garden) {
 				}
 			}();
 			var clickMsg = function () {
-				var _p4 = plantedSeed;
+				var _p4 = planted;
 				if (_p4.ctor === 'Just') {
-					return A3(_elm_lang$html$Messages$ClickSeed, row, column, _p4._0);
+					return A3(_elm_lang$html$Messages$ClickItem, row, column, _p4._0);
 				} else {
 					return _elm_lang$html$Messages$NoOp;
 				}
@@ -12613,7 +12665,7 @@ var _elm_lang$html$View$renderGarden = function (garden) {
 									_0: {
 										ctor: '_Tuple2',
 										_0: 'plot-active',
-										_1: !_elm_lang$core$Native_Utils.eq(plantedSeed, _elm_lang$core$Maybe$Nothing)
+										_1: !_elm_lang$core$Native_Utils.eq(planted, _elm_lang$core$Maybe$Nothing)
 									},
 									_1: {ctor: '[]'}
 								}
@@ -12625,17 +12677,28 @@ var _elm_lang$html$View$renderGarden = function (garden) {
 						}
 					},
 					droppable),
-				renderSeed(plantedSeed));
+				A2(
+					_elm_lang$core$Maybe$withDefault,
+					{ctor: '[]'},
+					A2(_elm_lang$core$Maybe$map, renderItem, planted)));
 		});
 	return flatten2DToList(
 		A2(_tortus$elm_array_2d$Array2D$indexedMap, plot, garden));
 };
 var _elm_lang$html$View$renderInventory = function (inventory) {
-	var stack = function (_p5) {
-		var _p6 = _p5;
-		var _p8 = _p6._0;
-		var _p7 = _p6._1;
-		return (_elm_lang$core$Native_Utils.cmp(_p7, 0) > 0) ? A2(
+	var color = function (item) {
+		var _p5 = item.options;
+		if (_p5.ctor === 'Seed') {
+			return _p5._0.color;
+		} else {
+			return 'black';
+		}
+	};
+	var stack = function (_p6) {
+		var _p7 = _p6;
+		var _p9 = _p7._0;
+		var _p8 = _p7._1;
+		return (_elm_lang$core$Native_Utils.cmp(_p8, 0) > 0) ? A2(
 			_elm_lang$html$Html$div,
 			{
 				ctor: '::',
@@ -12645,7 +12708,11 @@ var _elm_lang$html$View$renderInventory = function (inventory) {
 					_0: _elm_lang$html$Html_Attributes$style(
 						{
 							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 'border-color', _1: _p8.color},
+							_0: {
+								ctor: '_Tuple2',
+								_0: 'border-color',
+								_1: color(_p9)
+							},
 							_1: {ctor: '[]'}
 						}),
 					_1: {ctor: '[]'}
@@ -12662,11 +12729,11 @@ var _elm_lang$html$View$renderInventory = function (inventory) {
 							_0: _elm_lang$html$Html_Attributes$class('seed-image'),
 							_1: {
 								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$src(_p8.image),
+								_0: _elm_lang$html$Html_Attributes$src(_p9.image),
 								_1: {ctor: '[]'}
 							}
 						},
-						A2(_norpan$elm_html5_drag_drop$Html5_DragDrop$draggable, _elm_lang$html$Messages$DragDropMsg, _p8)),
+						A2(_norpan$elm_html5_drag_drop$Html5_DragDrop$draggable, _elm_lang$html$Messages$DragDropMsg, _p9)),
 					{ctor: '[]'}),
 				_1: {
 					ctor: '::',
@@ -12680,7 +12747,11 @@ var _elm_lang$html$View$renderInventory = function (inventory) {
 								_0: _elm_lang$html$Html_Attributes$style(
 									{
 										ctor: '::',
-										_0: {ctor: '_Tuple2', _0: 'background-color', _1: _p8.color},
+										_0: {
+											ctor: '_Tuple2',
+											_0: 'background-color',
+											_1: color(_p9)
+										},
 										_1: {ctor: '[]'}
 									}),
 								_1: {ctor: '[]'}
@@ -12689,7 +12760,7 @@ var _elm_lang$html$View$renderInventory = function (inventory) {
 						{
 							ctor: '::',
 							_0: _elm_lang$html$Html$text(
-								_elm_lang$core$Basics$toString(_p7)),
+								_elm_lang$core$Basics$toString(_p8)),
 							_1: {ctor: '[]'}
 						}),
 					_1: {ctor: '[]'}
@@ -12876,7 +12947,7 @@ var _elm_lang$html$Update$update = F2(
 								_p4._0._1._1,
 								_elm_lang$core$Maybe$Just(_p5),
 								model.garden),
-							_1: A2(_elm_lang$html$Inventory$removeSeedFromInventory, _p5, model.inventory)
+							_1: A2(_elm_lang$html$Inventory$removeItemFromInventory, _p5, model.inventory)
 						};
 					} else {
 						return {ctor: '_Tuple2', _0: model.garden, _1: model.inventory};
@@ -12891,35 +12962,52 @@ var _elm_lang$html$Update$update = F2(
 						{seedDragDrop: newSeedDragDrop, garden: newGarden, inventory: newInventory}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
-			case 'ClickSeed':
-				var _p8 = _p0._2;
-				var _p7 = _p0._0;
-				var _p6 = _p0._1;
-				var growSeed = A4(
-					_tortus$elm_array_2d$Array2D$set,
-					_p7,
-					_p6,
-					_elm_lang$core$Maybe$Just(
-						_elm_lang$core$Native_Utils.update(
-							_p8,
-							{age: _p8.age + 1})),
-					model.garden);
-				var harvestSeed = A4(_tortus$elm_array_2d$Array2D$set, _p7, _p6, _elm_lang$core$Maybe$Nothing, model.garden);
-				var newModel = (_elm_lang$core$Native_Utils.cmp(_p8.age, _p8.maturity) > -1) ? _elm_lang$core$Native_Utils.update(
-					model,
-					{bank: model.bank + (_p8.cost * 2), garden: harvestSeed}) : _elm_lang$core$Native_Utils.update(
-					model,
-					{garden: growSeed});
+			case 'ClickItem':
+				var _p10 = _p0._0;
+				var _p9 = _p0._2;
+				var _p8 = _p0._1;
+				var growSeed = function (options) {
+					return A4(
+						_tortus$elm_array_2d$Array2D$set,
+						_p10,
+						_p8,
+						_elm_lang$core$Maybe$Just(
+							_elm_lang$core$Native_Utils.update(
+								_p9,
+								{
+									options: _elm_lang$html$Item$Seed(
+										_elm_lang$core$Native_Utils.update(
+											options,
+											{age: options.age + 1}))
+								})),
+						model.garden);
+				};
+				var harvestSeed = A4(_tortus$elm_array_2d$Array2D$set, _p10, _p8, _elm_lang$core$Maybe$Nothing, model.garden);
+				var newModel = function () {
+					var _p6 = _p9.options;
+					if (_p6.ctor === 'Seed') {
+						var _p7 = _p6._0;
+						return (_elm_lang$core$Native_Utils.cmp(_p7.age, _p7.maturity) > -1) ? _elm_lang$core$Native_Utils.update(
+							model,
+							{bank: model.bank + (_p9.cost * 2), garden: harvestSeed}) : _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								garden: growSeed(_p7)
+							});
+					} else {
+						return model;
+					}
+				}();
 				return {ctor: '_Tuple2', _0: newModel, _1: _elm_lang$core$Platform_Cmd$none};
 			default:
-				var _p10 = _p0._0;
-				var _p9 = (_elm_lang$core$Native_Utils.cmp(model.bank, _p10.cost) > -1) ? {
+				var _p12 = _p0._0;
+				var _p11 = (_elm_lang$core$Native_Utils.cmp(model.bank, _p12.cost) > -1) ? {
 					ctor: '_Tuple2',
-					_0: A2(_elm_lang$html$Inventory$addSeedToInventory, _p10, model.inventory),
-					_1: model.bank - _p10.cost
+					_0: A2(_elm_lang$html$Inventory$addItemToInventory, _p12, model.inventory),
+					_1: model.bank - _p12.cost
 				} : {ctor: '_Tuple2', _0: model.inventory, _1: model.bank};
-				var newInventory = _p9._0;
-				var newBank = _p9._1;
+				var newInventory = _p11._0;
+				var newBank = _p11._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(

@@ -124,6 +124,8 @@ html, body {
   display: grid;
   grid-template-columns: repeat(9, auto);
   grid-template-rows: repeat(9, auto);
+
+  user-select: none;
 }
 
 .plot {
