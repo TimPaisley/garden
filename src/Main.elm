@@ -5,7 +5,7 @@ import Model exposing (Model, init)
 import View exposing (view)
 import Update exposing (update)
 import Messages exposing (Msg(..))
-import Time exposing (every, second, millisecond)
+import Time exposing (every, millisecond)
 
 
 main =
@@ -23,4 +23,4 @@ main =
 
 subscriptions : Model -> Sub Messages.Msg
 subscriptions model =
-    every second Tick
+    every (500 * millisecond) Tick

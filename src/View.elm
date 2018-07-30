@@ -4,15 +4,14 @@ import Item exposing (Item)
 import Inventory exposing (Inventory)
 import Messages exposing (Msg(..))
 import Model exposing (Model)
+import Seeds
+import Tools
 import Array exposing (Array)
 import AllDict exposing (AllDict)
 import Array2D exposing (Array2D)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import FormatNumber exposing (format)
-import FormatNumber.Locales exposing (usLocale)
-import FontAwesome exposing (icon)
 import Html5.DragDrop
 
 
@@ -21,7 +20,7 @@ view model =
     div [ class "container" ] [ banner model.time model.bank, content model ]
 
 
-banner : Int -> Int -> Html Messages.Msg
+banner : Float -> Int -> Html Messages.Msg
 banner time bank =
     div [ class "banner" ]
         [ div []
@@ -172,7 +171,7 @@ renderShop bank =
                     , div [ class "shop-cost" ] [ text <| toString cost ]
                     ]
     in
-        header :: (List.map itemOption Item.allSeeds)
+        header :: (List.map itemOption (Seeds.allSeeds ++ Tools.allTools))
 
 
 renderResearch : List (Html Messages.Msg)

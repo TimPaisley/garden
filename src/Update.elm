@@ -1,9 +1,13 @@
 module Update exposing (..)
 
+import Array
+import Garden exposing (Garden)
 import Inventory exposing (addItemToInventory, removeItemFromInventory)
 import Item exposing (Item)
 import Model exposing (Model)
 import Messages exposing (Msg(..))
+import Seeds
+import Tools
 import Array2D exposing (Array2D)
 import Html5.DragDrop
 
@@ -12,7 +16,19 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Tick _ ->
-            ( { model | time = model.time + 1 }, Cmd.none )
+            let
+                effectArea =
+                    Array2D.columns model.garden
+                        |> Tools.toolToEffectArea
+
+                toolEffects =
+                    Garden.flatten model.garden
+                        |> List.filterMap effectArea
+
+                newGarden =
+                    List.foldl (uncurry Garden.updateItems) model.garden toolEffects
+            in
+                ( { model | time = model.time + 0.5, garden = newGarden }, Cmd.none )
 
         NoOp ->
             ( model, Cmd.none )
@@ -52,7 +68,7 @@ update msg model =
                     Array2D.set row column Nothing model.garden
 
                 growSeed options =
-                    Array2D.set row column (Just { item | options = Item.Seed { options | age = options.age + 1 } }) model.garden
+                    Array2D.set row column (Just { item | options = Item.Seed (Seeds.growSeed options) }) model.garden
 
                 newModel =
                     case item.options of

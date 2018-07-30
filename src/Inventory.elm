@@ -1,6 +1,7 @@
 module Inventory exposing (..)
 
 import Item exposing (Item)
+import Seeds
 import AllDict exposing (AllDict)
 
 
@@ -10,7 +11,7 @@ type alias Inventory =
 
 init : Inventory
 init =
-    AllDict.fromList .name [ ( Item.apple, 10 ), ( Item.orange, 5 ) ]
+    AllDict.fromList .name [ ( Seeds.apple, 10 ), ( Seeds.orange, 5 ) ]
 
 
 addItemToInventory : Item -> Inventory -> Inventory

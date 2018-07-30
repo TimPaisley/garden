@@ -8,7 +8,7 @@ import Html5.DragDrop
 
 
 type alias Model =
-    { time : Int
+    { time : Float
     , garden : Garden
     , inventory : Inventory
     , bank : Int

@@ -9819,6 +9819,22 @@ var _elm_lang$html$Item$Seed = function (a) {
 	return {ctor: 'Seed', _0: a};
 };
 
+var _elm_lang$html$Garden$flatten = function (garden) {
+	return A2(
+		_elm_lang$core$List$indexedMap,
+		F2(
+			function (v0, v1) {
+				return {ctor: '_Tuple2', _0: v0, _1: v1};
+			}),
+		A3(
+			_elm_lang$core$Array$foldr,
+			F2(
+				function (x, y) {
+					return A2(_elm_lang$core$Basics_ops['++'], x, y);
+				}),
+			{ctor: '[]'},
+			A2(_elm_lang$core$Array$map, _elm_lang$core$Array$toList, garden.data)));
+};
 var _elm_lang$html$Garden$updateItems = F3(
 	function (coordinates, update, garden) {
 		var updateItem = F3(
@@ -10474,6 +10490,31 @@ var _elm_lang$html$Tools$allTools = {
 	_0: _elm_lang$html$Tools$sprinkler,
 	_1: {ctor: '[]'}
 };
+var _elm_lang$html$Tools$toolToEffectArea = F2(
+	function (width, _p5) {
+		var _p6 = _p5;
+		var _p9 = _p6._0;
+		var toolPosition = {
+			ctor: '_Tuple2',
+			_0: (_p9 / width) | 0,
+			_1: A2(_elm_lang$core$Basics_ops['%'], _p9, width)
+		};
+		var itemToEffectArea = function (item) {
+			var _p7 = item.options;
+			if (_p7.ctor === 'Tool') {
+				var _p8 = _p7._0;
+				return _elm_lang$core$Maybe$Just(
+					{
+						ctor: '_Tuple2',
+						_0: _p8.area(toolPosition),
+						_1: _p8.effect
+					});
+			} else {
+				return _elm_lang$core$Maybe$Nothing;
+			}
+		};
+		return A2(_elm_lang$core$Maybe$andThen, itemToEffectArea, _p6._1);
+	});
 
 var _elm_lang$html$View$renderResearch = function () {
 	var header = A2(
@@ -11039,46 +11080,12 @@ var _elm_lang$html$Update$update = F2(
 		var _p0 = msg;
 		switch (_p0.ctor) {
 			case 'Tick':
-				var toolToEffectArea = function (_p1) {
-					var _p2 = _p1;
-					var _p5 = _p2._0;
-					var gardenWidth = _tortus$elm_array_2d$Array2D$columns(model.garden);
-					var toolPosition = {
-						ctor: '_Tuple2',
-						_0: (_p5 / gardenWidth) | 0,
-						_1: A2(_elm_lang$core$Basics_ops['%'], _p5, gardenWidth)
-					};
-					var itemToEffectArea = function (item) {
-						var _p3 = item.options;
-						if (_p3.ctor === 'Tool') {
-							var _p4 = _p3._0;
-							return _elm_lang$core$Maybe$Just(
-								{
-									ctor: '_Tuple2',
-									_0: _p4.area(toolPosition),
-									_1: _p4.effect
-								});
-						} else {
-							return _elm_lang$core$Maybe$Nothing;
-						}
-					};
-					return A2(_elm_lang$core$Maybe$andThen, itemToEffectArea, _p2._1);
-				};
-				var flatGarden = A2(
-					_elm_lang$core$List$indexedMap,
-					F2(
-						function (v0, v1) {
-							return {ctor: '_Tuple2', _0: v0, _1: v1};
-						}),
-					A3(
-						_elm_lang$core$Array$foldr,
-						F2(
-							function (x, y) {
-								return A2(_elm_lang$core$Basics_ops['++'], x, y);
-							}),
-						{ctor: '[]'},
-						A2(_elm_lang$core$Array$map, _elm_lang$core$Array$toList, model.garden.data)));
-				var toolEffects = A2(_elm_lang$core$List$filterMap, toolToEffectArea, flatGarden);
+				var effectArea = _elm_lang$html$Tools$toolToEffectArea(
+					_tortus$elm_array_2d$Array2D$columns(model.garden));
+				var toolEffects = A2(
+					_elm_lang$core$List$filterMap,
+					effectArea,
+					_elm_lang$html$Garden$flatten(model.garden));
 				var newGarden = A3(
 					_elm_lang$core$List$foldl,
 					_elm_lang$core$Basics$uncurry(_elm_lang$html$Garden$updateItems),
@@ -11094,39 +11101,39 @@ var _elm_lang$html$Update$update = F2(
 			case 'NoOp':
 				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 			case 'DragDropMsg':
-				var _p6 = A2(_norpan$elm_html5_drag_drop$Html5_DragDrop$update, _p0._0, model.seedDragDrop.dragDrop);
-				var newDragDrop = _p6._0;
-				var result = _p6._1;
+				var _p1 = A2(_norpan$elm_html5_drag_drop$Html5_DragDrop$update, _p0._0, model.seedDragDrop.dragDrop);
+				var newDragDrop = _p1._0;
+				var result = _p1._1;
 				var dragId = _norpan$elm_html5_drag_drop$Html5_DragDrop$getDragId(newDragDrop);
 				var dropId = _norpan$elm_html5_drag_drop$Html5_DragDrop$getDropId(newDragDrop);
 				var newSeedDragDrop = function () {
-					var _p7 = {ctor: '_Tuple2', _0: dragId, _1: dropId};
-					if ((_p7.ctor === '_Tuple2') && (_p7._0.ctor === 'Just')) {
+					var _p2 = {ctor: '_Tuple2', _0: dragId, _1: dropId};
+					if ((_p2.ctor === '_Tuple2') && (_p2._0.ctor === 'Just')) {
 						return {dragDrop: newDragDrop, hoverPos: dropId};
 					} else {
 						return model.seedDragDrop;
 					}
 				}();
-				var _p8 = function () {
-					var _p9 = result;
-					if (_p9.ctor === 'Just') {
-						var _p10 = _p9._0._0;
+				var _p3 = function () {
+					var _p4 = result;
+					if (_p4.ctor === 'Just') {
+						var _p5 = _p4._0._0;
 						return {
 							ctor: '_Tuple2',
 							_0: A4(
 								_tortus$elm_array_2d$Array2D$set,
-								_p9._0._1._0,
-								_p9._0._1._1,
-								_elm_lang$core$Maybe$Just(_p10),
+								_p4._0._1._0,
+								_p4._0._1._1,
+								_elm_lang$core$Maybe$Just(_p5),
 								model.garden),
-							_1: A2(_elm_lang$html$Inventory$removeItemFromInventory, _p10, model.inventory)
+							_1: A2(_elm_lang$html$Inventory$removeItemFromInventory, _p5, model.inventory)
 						};
 					} else {
 						return {ctor: '_Tuple2', _0: model.garden, _1: model.inventory};
 					}
 				}();
-				var newGarden = _p8._0;
-				var newInventory = _p8._1;
+				var newGarden = _p3._0;
+				var newInventory = _p3._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -11135,34 +11142,34 @@ var _elm_lang$html$Update$update = F2(
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'ClickItem':
-				var _p15 = _p0._0;
-				var _p14 = _p0._2;
-				var _p13 = _p0._1;
+				var _p10 = _p0._0;
+				var _p9 = _p0._2;
+				var _p8 = _p0._1;
 				var growSeed = function (options) {
 					return A4(
 						_tortus$elm_array_2d$Array2D$set,
-						_p15,
-						_p13,
+						_p10,
+						_p8,
 						_elm_lang$core$Maybe$Just(
 							_elm_lang$core$Native_Utils.update(
-								_p14,
+								_p9,
 								{
 									options: _elm_lang$html$Item$Seed(
 										_elm_lang$html$Seeds$growSeed(options))
 								})),
 						model.garden);
 				};
-				var harvestSeed = A4(_tortus$elm_array_2d$Array2D$set, _p15, _p13, _elm_lang$core$Maybe$Nothing, model.garden);
+				var harvestSeed = A4(_tortus$elm_array_2d$Array2D$set, _p10, _p8, _elm_lang$core$Maybe$Nothing, model.garden);
 				var newModel = function () {
-					var _p11 = _p14.options;
-					if (_p11.ctor === 'Seed') {
-						var _p12 = _p11._0;
-						return (_elm_lang$core$Native_Utils.cmp(_p12.age, _p12.maturity) > -1) ? _elm_lang$core$Native_Utils.update(
+					var _p6 = _p9.options;
+					if (_p6.ctor === 'Seed') {
+						var _p7 = _p6._0;
+						return (_elm_lang$core$Native_Utils.cmp(_p7.age, _p7.maturity) > -1) ? _elm_lang$core$Native_Utils.update(
 							model,
-							{bank: model.bank + (_p14.cost * 2), garden: harvestSeed}) : _elm_lang$core$Native_Utils.update(
+							{bank: model.bank + (_p9.cost * 2), garden: harvestSeed}) : _elm_lang$core$Native_Utils.update(
 							model,
 							{
-								garden: growSeed(_p12)
+								garden: growSeed(_p7)
 							});
 					} else {
 						return model;
@@ -11170,14 +11177,14 @@ var _elm_lang$html$Update$update = F2(
 				}();
 				return {ctor: '_Tuple2', _0: newModel, _1: _elm_lang$core$Platform_Cmd$none};
 			default:
-				var _p17 = _p0._0;
-				var _p16 = (_elm_lang$core$Native_Utils.cmp(model.bank, _p17.cost) > -1) ? {
+				var _p12 = _p0._0;
+				var _p11 = (_elm_lang$core$Native_Utils.cmp(model.bank, _p12.cost) > -1) ? {
 					ctor: '_Tuple2',
-					_0: A2(_elm_lang$html$Inventory$addItemToInventory, _p17, model.inventory),
-					_1: model.bank - _p17.cost
+					_0: A2(_elm_lang$html$Inventory$addItemToInventory, _p12, model.inventory),
+					_1: model.bank - _p12.cost
 				} : {ctor: '_Tuple2', _0: model.inventory, _1: model.bank};
-				var newInventory = _p16._0;
-				var newBank = _p16._1;
+				var newInventory = _p11._0;
+				var newBank = _p11._1;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
