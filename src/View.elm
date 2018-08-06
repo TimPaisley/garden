@@ -2,6 +2,7 @@ module View exposing (..)
 
 import Item exposing (Item)
 import Inventory exposing (Inventory)
+import Project exposing (Project)
 import Messages exposing (Msg(..))
 import Model exposing (Model)
 import Shop exposing (Shop)
@@ -58,10 +59,14 @@ formatTime time =
 content : Model -> Html Messages.Msg
 content model =
     div [ class "content" ]
-        [ div [ class "seeds" ] (renderInventory model.inventory)
-        , div [ class "garden" ] (renderGarden model.garden)
-        , div [ class "shop" ] (renderShop model.shop model.bank)
-        , div [ class "research" ] (renderResearch)
+        [ div [ class "seeds" ] <|
+            renderInventory model.inventory
+        , div [ class "garden" ] <|
+            renderGarden model.garden
+        , div [ class "shop" ] <|
+            renderShop model.shop model.bank (List.member Project.unlockTools model.projects)
+        , div [ class "research" ] <|
+            renderResearch model.bank model.projects
         ]
 
 
@@ -143,15 +148,19 @@ renderGarden garden =
         Array2D.indexedMap plot garden |> flatten2DToList
 
 
-renderShop : Shop -> Int -> List (Html Messages.Msg)
-renderShop shop bank =
+renderShop : Shop -> Int -> Bool -> List (Html Messages.Msg)
+renderShop shop bank toolsUnlocked =
     let
         header =
-            div [ class "section-header" ]
-                [ div [ class "arrow", onClick ShopNextSection ] [ icon FontAwesome.caretLeft ]
-                , div [ class "title" ] [ text <| "Shop - " ++ (toString shop.activeSection) ]
-                , div [ class "arrow", onClick ShopPreviousSection ] [ icon FontAwesome.caretRight ]
-                ]
+            if toolsUnlocked then
+                div [ class "section-header" ]
+                    [ div [ class "arrow", onClick ShopNextSection ] [ icon FontAwesome.caretLeft ]
+                    , div [ class "title" ] [ text <| "Shop - " ++ (toString shop.activeSection) ]
+                    , div [ class "arrow", onClick ShopPreviousSection ] [ icon FontAwesome.caretRight ]
+                    ]
+            else
+                div [ class "section-header" ]
+                    [ div [ class "title" ] [ text <| "Shop - " ++ (toString shop.activeSection) ] ]
 
         itemOption item =
             let
@@ -176,23 +185,35 @@ renderShop shop bank =
         header :: (List.map itemOption <| Shop.shopItems shop)
 
 
-renderResearch : List (Html Messages.Msg)
-renderResearch =
+renderResearch : Int -> List Project -> List (Html Messages.Msg)
+renderResearch bank projects =
     let
         header =
             div [ class "section-header" ]
-                [ div [] [ icon FontAwesome.flask ]
-                , div [ class "title" ] [ text "Research" ]
+                [ div [ class "title" ] [ text "Research" ]
                 ]
 
-        researchOption =
-            div [ class "shop-option" ]
-                [ img [ class "shop-image", src "https://image.flaticon.com/icons/svg/135/135733.svg", height 30 ] []
-                , div [ class "shop-details" ]
-                    [ div [ class "shop-name" ] [ text "Wander down to Bunnings" ]
-                    , div [ class "shop-description" ] [ text "Unlocks Tools in the Shop" ]
+        availableProjects =
+            List.filter (\p -> not <| List.member p projects) Project.allProjects
+
+        researchOption project =
+            let
+                { name, description, image, cost } =
+                    project
+
+                disabled =
+                    cost > bank
+            in
+                div
+                    [ classList [ ( "shop-option", True ), ( "shop-option-disabled", disabled ) ]
+                    , onClick <| ResearchProject project
                     ]
-                , div [ class "shop-cost" ] [ text "$1000" ]
-                ]
+                    [ img [ class "shop-image", src image, height 30 ] []
+                    , div [ class "shop-details" ]
+                        [ div [ class "shop-name" ] [ text name ]
+                        , div [ class "shop-description" ] [ text description ]
+                        ]
+                    , div [ class "shop-cost" ] [ text <| "$" ++ (toString cost) ]
+                    ]
     in
-        header :: [ researchOption ]
+        header :: (List.map researchOption availableProjects)

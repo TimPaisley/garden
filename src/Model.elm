@@ -4,6 +4,7 @@ import Garden exposing (Garden)
 import Item exposing (Item)
 import Inventory exposing (Inventory)
 import Messages exposing (Msg)
+import Project exposing (Project)
 import Shop exposing (Shop)
 import Html5.DragDrop
 
@@ -13,6 +14,7 @@ type alias Model =
     , garden : Garden
     , inventory : Inventory
     , shop : Shop
+    , projects : List Project
     , bank : Int
     , seedDragDrop : SeedDragDrop
     }
@@ -34,7 +36,8 @@ initialModel =
         , garden = Garden.init size
         , inventory = Inventory.init
         , shop = Shop.init
-        , bank = 100
+        , projects = []
+        , bank = 0
         , seedDragDrop = { dragDrop = Html5.DragDrop.init, hoverPos = Nothing }
         }
 

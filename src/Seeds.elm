@@ -1,6 +1,7 @@
 module Seeds exposing (..)
 
 import Item exposing (Item, ItemOptions(..), SeedOptions)
+import Project exposing (Project)
 
 
 allSeeds : List Item
@@ -19,6 +20,16 @@ growSeed options =
         { options | age = options.age + 1 }
     else
         options
+
+
+calculateProfit : Int -> List Project -> Int
+calculateProfit cost projects =
+    case List.filter (\p -> p.perk == Project.ProfitMultiplier1) projects of
+        _ :: [] ->
+            cost * 3
+
+        _ ->
+            cost * 2
 
 
 apple : Item

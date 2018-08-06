@@ -1,6 +1,7 @@
 module Messages exposing (..)
 
 import Item exposing (Item)
+import Project exposing (Project)
 import Time exposing (Time)
 import Html5.DragDrop
 
@@ -13,3 +14,4 @@ type Msg
     | PurchaseItem Item
     | ShopNextSection
     | ShopPreviousSection
+    | ResearchProject Project

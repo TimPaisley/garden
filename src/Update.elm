@@ -75,7 +75,7 @@ update msg model =
                     case item.options of
                         Item.Seed options ->
                             if options.age >= options.maturity then
-                                { model | bank = model.bank + (item.cost * 2), garden = harvestSeed }
+                                { model | bank = model.bank + (Seeds.calculateProfit item.cost model.projects), garden = harvestSeed }
                             else
                                 { model | garden = growSeed options }
 
@@ -99,3 +99,13 @@ update msg model =
 
         ShopPreviousSection ->
             ( { model | shop = Shop.previousSection model.shop }, Cmd.none )
+
+        ResearchProject project ->
+            let
+                ( newProjects, newBank ) =
+                    if model.bank >= project.cost then
+                        ( project :: model.projects, model.bank - project.cost )
+                    else
+                        ( model.projects, model.bank )
+            in
+                ( { model | projects = newProjects, bank = newBank }, Cmd.none )
