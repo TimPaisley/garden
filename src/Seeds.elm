@@ -31,7 +31,7 @@ apple =
                 , color = "#D13834"
                 }
     in
-        { name = "Apple"
+        { name = "Apple Seeds"
         , description = "Fully grown in 10 clicks"
         , image = "https://image.flaticon.com/icons/svg/135/135728.svg"
         , cost = 10
@@ -49,7 +49,7 @@ orange =
                 , color = "#ED8F20"
                 }
     in
-        { name = "Orange"
+        { name = "Orange Seeds"
         , description = "Fully grown in 12 clicks"
         , image = "https://image.flaticon.com/icons/svg/135/135620.svg"
         , cost = 12
@@ -67,7 +67,7 @@ banana =
                 , color = "#E8C52E"
                 }
     in
-        { name = "Banana"
+        { name = "Banana Seeds"
         , description = "Fully grown in 15 clicks"
         , image = "https://image.flaticon.com/icons/svg/135/135631.svg"
         , cost = 15
@@ -85,7 +85,7 @@ lettuce =
                 , color = "#659C35"
                 }
     in
-        { name = "Lettuce"
+        { name = "Lettuce Seeds"
         , description = "Fully grown in 25 clicks"
         , image = "https://image.flaticon.com/icons/svg/135/135699.svg"
         , cost = 25
@@ -103,7 +103,7 @@ grape =
                 , color = "#6F58A8"
                 }
     in
-        { name = "Grape"
+        { name = "Grape Seeds"
         , description = "Full grown in 30 clicks"
         , image = "https://image.flaticon.com/icons/svg/135/135542.svg"
         , cost = 30

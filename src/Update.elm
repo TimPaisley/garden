@@ -7,6 +7,7 @@ import Item exposing (Item)
 import Model exposing (Model)
 import Messages exposing (Msg(..))
 import Seeds
+import Shop
 import Tools
 import Array2D exposing (Array2D)
 import Html5.DragDrop
@@ -92,3 +93,9 @@ update msg model =
                         ( model.inventory, model.bank )
             in
                 ( { model | inventory = newInventory, bank = newBank }, Cmd.none )
+
+        ShopNextSection ->
+            ( { model | shop = Shop.nextSection model.shop }, Cmd.none )
+
+        ShopPreviousSection ->
+            ( { model | shop = Shop.previousSection model.shop }, Cmd.none )

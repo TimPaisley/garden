@@ -4,11 +4,11 @@ import Item exposing (Item)
 import Inventory exposing (Inventory)
 import Messages exposing (Msg(..))
 import Model exposing (Model)
-import Seeds
-import Tools
+import Shop exposing (Shop)
 import Array exposing (Array)
 import AllDict exposing (AllDict)
 import Array2D exposing (Array2D)
+import FontAwesome exposing (icon)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -27,6 +27,7 @@ banner time bank =
             [ h1 [ class "title" ] [ text "Garden" ]
             , h2 [ class "subtitle" ] [ text "Plant Stuff and Profit" ]
             ]
+        , div [ class "bank" ] [ text <| "$" ++ (toString bank) ]
         ]
 
 
@@ -59,7 +60,7 @@ content model =
     div [ class "content" ]
         [ div [ class "seeds" ] (renderInventory model.inventory)
         , div [ class "garden" ] (renderGarden model.garden)
-        , div [ class "shop" ] (renderShop model.bank)
+        , div [ class "shop" ] (renderShop model.shop model.bank)
         , div [ class "research" ] (renderResearch)
         ]
 
@@ -142,13 +143,14 @@ renderGarden garden =
         Array2D.indexedMap plot garden |> flatten2DToList
 
 
-renderShop : Int -> List (Html Messages.Msg)
-renderShop bank =
+renderShop : Shop -> Int -> List (Html Messages.Msg)
+renderShop shop bank =
     let
         header =
             div [ class "section-header" ]
-                [ div [ class "title" ] [ text "Shop" ]
-                , div [ class "subtitle" ] [ text <| "$" ++ (toString bank) ]
+                [ div [ class "arrow", onClick ShopNextSection ] [ icon FontAwesome.caretLeft ]
+                , div [ class "title" ] [ text <| "Shop - " ++ (toString shop.activeSection) ]
+                , div [ class "arrow", onClick ShopPreviousSection ] [ icon FontAwesome.caretRight ]
                 ]
 
         itemOption item =
@@ -165,13 +167,13 @@ renderShop bank =
                     ]
                     [ img [ class "shop-image", src image, height 30 ] []
                     , div [ class "shop-details" ]
-                        [ div [ class "shop-name" ] [ text <| name ++ " Seeds" ]
+                        [ div [ class "shop-name" ] [ text <| name ]
                         , div [ class "shop-description" ] [ text description ]
                         ]
-                    , div [ class "shop-cost" ] [ text <| toString cost ]
+                    , div [ class "shop-cost" ] [ text <| "$" ++ (toString cost) ]
                     ]
     in
-        header :: (List.map itemOption (Seeds.allSeeds ++ Tools.allTools))
+        header :: (List.map itemOption <| Shop.shopItems shop)
 
 
 renderResearch : List (Html Messages.Msg)
@@ -179,8 +181,18 @@ renderResearch =
     let
         header =
             div [ class "section-header" ]
-                [ div [ class "title" ] [ text "Research" ]
-                , div [ class "subtitle" ] [ text <| "1 point" ]
+                [ div [] [ icon FontAwesome.flask ]
+                , div [ class "title" ] [ text "Research" ]
+                ]
+
+        researchOption =
+            div [ class "shop-option" ]
+                [ img [ class "shop-image", src "https://image.flaticon.com/icons/svg/135/135733.svg", height 30 ] []
+                , div [ class "shop-details" ]
+                    [ div [ class "shop-name" ] [ text "Wander down to Bunnings" ]
+                    , div [ class "shop-description" ] [ text "Unlocks Tools in the Shop" ]
+                    ]
+                , div [ class "shop-cost" ] [ text "$1000" ]
                 ]
     in
-        [ header ]
+        header :: [ researchOption ]

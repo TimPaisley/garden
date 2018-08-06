@@ -11,3 +11,5 @@ type Msg
     | DragDropMsg (Html5.DragDrop.Msg Item ( Int, Int ))
     | ClickItem Int Int Item
     | PurchaseItem Item
+    | ShopNextSection
+    | ShopPreviousSection
