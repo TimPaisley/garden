@@ -12125,7 +12125,7 @@ var _elm_lang$html$Model$initialModel = function () {
 		inventory: _elm_lang$html$Inventory$init,
 		shop: _elm_lang$html$Shop$init,
 		projects: {ctor: '[]'},
-		bank: 10000,
+		bank: 0,
 		seedDragDrop: {dragDrop: _norpan$elm_html5_drag_drop$Html5_DragDrop$init, hoverPos: _elm_lang$core$Maybe$Nothing}
 	};
 }();

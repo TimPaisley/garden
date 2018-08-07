@@ -102,9 +102,10 @@ html, body {
 
 .seed-option .seed-image {
   position: absolute;
-  top: 10px;
-  left: 10px;
-  height: 40px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: 10px 20px 20px 10px;
   cursor: pointer;
 }
 
