@@ -11400,9 +11400,9 @@ var _elm_lang$html$Project$Project = F5(
 		return {name: a, description: b, image: c, cost: d, perk: e};
 	});
 var _elm_lang$html$Project$ProfitMultiplier1 = {ctor: 'ProfitMultiplier1'};
-var _elm_lang$html$Project$profitMultiplier1 = {name: '\"GE Free\" Marketing', description: 'Earn 1.5x profit for each harvested crop', image: 'https://image.flaticon.com/icons/svg/138/138255.svg', cost: 2500, perk: _elm_lang$html$Project$ProfitMultiplier1};
+var _elm_lang$html$Project$profitMultiplier1 = {name: '\"GE Free\" Marketing', description: 'Earn 1.5x profit for each harvested crop', image: 'https://image.flaticon.com/icons/svg/138/138255.svg', cost: 1000, perk: _elm_lang$html$Project$ProfitMultiplier1};
 var _elm_lang$html$Project$UnlockTools = {ctor: 'UnlockTools'};
-var _elm_lang$html$Project$unlockTools = {name: 'Roadtrip to Bunnings', description: 'Unlock Tools in the Shop', image: 'https://image.flaticon.com/icons/svg/222/222586.svg', cost: 1000, perk: _elm_lang$html$Project$UnlockTools};
+var _elm_lang$html$Project$unlockTools = {name: 'Roadtrip to Bunnings', description: 'Unlock Tools in the Shop', image: 'https://image.flaticon.com/icons/svg/222/222586.svg', cost: 200, perk: _elm_lang$html$Project$UnlockTools};
 var _elm_lang$html$Project$allProjects = {
 	ctor: '::',
 	_0: _elm_lang$html$Project$unlockTools,

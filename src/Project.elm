@@ -25,7 +25,7 @@ unlockTools =
     { name = "Roadtrip to Bunnings"
     , description = "Unlock Tools in the Shop"
     , image = "https://image.flaticon.com/icons/svg/222/222586.svg"
-    , cost = 1000
+    , cost = 200
     , perk = UnlockTools
     }
 
@@ -35,6 +35,6 @@ profitMultiplier1 =
     { name = "\"GE Free\" Marketing"
     , description = "Earn 1.5x profit for each harvested crop"
     , image = "https://image.flaticon.com/icons/svg/138/138255.svg"
-    , cost = 2500
+    , cost = 1000
     , perk = ProfitMultiplier1
     }
